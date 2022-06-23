@@ -76,5 +76,7 @@ namespace projektApbd.Shared.Models
         public Boolean Active { get; set; }
 
         public ICollection<UserCompany> UserCompanies { get; set; }
+
+        public ICollection<DailyOpenClose> DailyOpenCloses { get; set; }
     }
 }

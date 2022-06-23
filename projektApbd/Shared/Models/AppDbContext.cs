@@ -11,11 +11,16 @@ namespace projektApbd.Shared.Models
 {
     public class AppDbContext : DbContext
     {
+        private readonly IConfiguration _configuration;
+        
         public DbSet<User> Users { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<UserCompany> UserCompanies { get; set; }
 
-        public AppDbContext(DbContextOptions options) : base(options) { }
+        public AppDbContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -74,6 +79,31 @@ namespace projektApbd.Shared.Models
                 .OnDelete(DeleteBehavior.Cascade);
 
                 e.ToTable("UserCompany");
+            });
+
+            modelBuilder.Entity<DailyOpenClose>(e =>
+            {
+                e.HasKey(e => new
+                {
+                    e.Id,
+                    e.Date
+                });
+
+                e.HasOne(e => e.Company)
+                .WithMany(e => e.DailyOpenCloses)
+                .HasForeignKey(e => e.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                e.Property(e => e.Date).IsRequired();
+                e.Property(e => e.Open).IsRequired();
+                e.Property(e => e.High).IsRequired();
+                e.Property(e => e.Low).IsRequired();
+                e.Property(e => e.Close).IsRequired();
+                e.Property(e => e.Volume).HasMaxLength(255).IsRequired();
+                e.Property(e => e.AfterHours).IsRequired(false);
+                e.Property(e => e.PreMarket).IsRequired(false);
+
+                e.ToTable("DailyOpenClose");
             });
 
         }
