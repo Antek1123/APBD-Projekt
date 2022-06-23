@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace projektApbd.Shared.Models
 {
-    [Table("Users")]
-    internal class Users
+    [Table("User")]
+    public class User
     {
         [Key]
         [Required]
@@ -28,5 +28,7 @@ namespace projektApbd.Shared.Models
         [MaxLength(320)]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; } = string.Empty;
+
+        public virtual ICollection<UserCompany> UserCompanies { get; set; }
     }
 }

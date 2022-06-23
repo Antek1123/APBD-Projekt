@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace projektApbd.Shared.Models
 {
-    internal class Company
+    [Table("Company")]
+    public class Company
     {
         [Key]
         [Required]
@@ -72,5 +74,7 @@ namespace projektApbd.Shared.Models
         [Required]
         [MaxLength(10)]
         public Boolean Active { get; set; }
+
+        public ICollection<UserCompany> UserCompanies { get; set; }
     }
 }
