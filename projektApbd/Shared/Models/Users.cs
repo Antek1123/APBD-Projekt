@@ -17,14 +17,16 @@ namespace projektApbd.Shared.Models
 
         [Required]
         [MaxLength(15)]
-        public string Username { get; set; } = String.Empty;
+        public string Username { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(255)]
-        public string Password { get; set; } = String.Empty;
+        [DataType(DataType.Password)]
+        public string Password { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(320)]
-        public string Email { get; set; } = String.Empty;
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; } = string.Empty;
     }
 }
