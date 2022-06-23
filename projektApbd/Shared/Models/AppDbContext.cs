@@ -16,6 +16,7 @@ namespace projektApbd.Shared.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<UserCompany> UserCompanies { get; set; }
+        public DbSet<DailyOpenClose> DailyOpenCloses { get; set; }
 
         public AppDbContext(IConfiguration configuration)
         {
@@ -24,7 +25,7 @@ namespace projektApbd.Shared.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>(e => 
+            /*modelBuilder.Entity<User>(e => 
             {
                 e.HasKey(e => e.Id);
 
@@ -104,7 +105,7 @@ namespace projektApbd.Shared.Models
                 e.Property(e => e.PreMarket).IsRequired(false);
 
                 e.ToTable("DailyOpenClose");
-            });
+            });*/
 
         }
 
