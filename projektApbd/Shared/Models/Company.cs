@@ -75,8 +75,8 @@ namespace projektApbd.Shared.Models
         [MaxLength(10)]
         public Boolean Active { get; set; }
 
-        public ICollection<UserCompany> UserCompanies { get; set; }
+        public virtual ICollection<UserCompany> UserCompanies { get; set; }
 
-        public ICollection<DailyOpenClose> DailyOpenCloses { get; set; }
+        public virtual ICollection<DailyOpenClose> DailyOpenCloses { get; set; }
     }
 }
