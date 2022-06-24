@@ -59,15 +59,15 @@ namespace projektApbd.Server.Authorization
             return Encoding.ASCII.GetBytes(new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
-                .Build()["Authentication: Key"]);
+                .Build()["Authentication:Key"]);
         }
 
         private static int GetExpireDays()
         {
-            return int.Parse(new ConfigurationBuilder()
+            return Convert.ToInt32(new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
-                .Build()["Authentication: ExpireDays"]);
+                .Build()["Authentication:ExpireDays"]);
         }
     }
 }
