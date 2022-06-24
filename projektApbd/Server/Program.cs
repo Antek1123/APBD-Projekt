@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.ResponseCompression;
+using projektApbd.Shared.Models;
+using projektApbd.Server.Services;
+using projektApbd.Server.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +11,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<projektApbd.Shared.Models.AppDbContext>();
-builder.Services.AddScoped<projektApbd.Server.Services.IUserService, projektApbd.Server.Services.UserService>();
+builder.Services.AddDbContext<AppDbContext>();
+builder.Services.AddScoped<IJwtUtils, JwtUtils>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 var app = builder.Build();
 

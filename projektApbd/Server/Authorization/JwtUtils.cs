@@ -14,7 +14,7 @@ namespace projektApbd.Server.Authorization
             
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new System.Security.Claims.ClaimsIdentity(
+                Subject = new ClaimsIdentity(
                     new[] {new Claim("id", user.Id.ToString())}),
                     Expires = DateTime.UtcNow.AddDays(GetExpireDays()),
                     SigningCredentials = new SigningCredentials(
@@ -28,7 +28,7 @@ namespace projektApbd.Server.Authorization
 
         }
 
-        public Guid? ValidateToken(string token)
+        public int? ValidateToken(string token)
         {
             if(token == null)
                 return null;
@@ -45,7 +45,7 @@ namespace projektApbd.Server.Authorization
                 }, out SecurityToken securityToken);
 
                 JwtSecurityToken jwtSecurityToken = (JwtSecurityToken) securityToken;
-                Guid userId = Guid.Parse(jwtSecurityToken.Claims.First(e => e.Type == "id").Value);
+                int userId = int.Parse(jwtSecurityToken.Claims.First(e => e.Type == "id").Value);
 
                 return userId;
             } catch(Exception)
@@ -64,7 +64,7 @@ namespace projektApbd.Server.Authorization
 
         private static int GetExpireDays()
         {
-            return Int32.Parse(new ConfigurationBuilder()
+            return int.Parse(new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build()["Authentication: ExpireDays"]);
