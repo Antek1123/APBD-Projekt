@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BCryptNet = BCrypt.Net.BCrypt;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
 using projektApbd.Server.Services;
 
 namespace projektApbd.Server.Controllers
@@ -23,6 +25,7 @@ namespace projektApbd.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUser(projektApbd.Shared.Models.DTOs.User user)
         {
+            var password = System.Text.Encoding.UTF8.GetBytes(user.Password);
             await _userService.AddUser(user);
             return Ok();
 
