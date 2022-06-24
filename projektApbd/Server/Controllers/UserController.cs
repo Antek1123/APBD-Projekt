@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using projektApbd.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace projektApbd.Server.Controllers
 {
@@ -17,6 +18,7 @@ namespace projektApbd.Server.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(Shared.Models.DTOs.User user)
         {
             await _userService.Register(user);
@@ -24,10 +26,19 @@ namespace projektApbd.Server.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(Shared.Models.DTOs.UserLoginRequest userLogin)
         {
             var response = await _userService.Login(userLogin);
             return Ok(response);
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUser(string username)
+        {
+            return Ok(await _userService.GetUser(username));
+        }
+
     }
 }

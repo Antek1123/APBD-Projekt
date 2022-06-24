@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using projektApbd.Shared.Models;
 using projektApbd.Server.Services;
 using projektApbd.Server.Authorization;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +11,41 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(e =>
+{
+    e.SwaggerDoc("v1", new OpenApiInfo { Title = "projektApbd", Version = "v1" });
+    e.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Autorization header",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    e.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
 
+/*builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+});
+*/
 builder.Services.AddDbContext<AppDbContext>();
+
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
@@ -35,15 +69,23 @@ app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
+app.UseMiddleware<JwtMiddleware>();
+
 app.UseRouting();
 
-//app.UseAuthorization();
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.UseSwagger();
-app.UseSwaggerUI(e => e.SwaggerEndpoint("/swagger/v1/swagger.json", "Blazor API V1"));
+app.UseSwaggerUI(e => e.SwaggerEndpoint("/swagger/v1/swagger.json", "projekt Apbd V1"));
 
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+

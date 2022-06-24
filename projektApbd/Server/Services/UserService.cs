@@ -46,6 +46,14 @@ namespace projektApbd.Server.Services
                 throw new NotFoundException("User not exists");
         }
 
+        public async Task<User> GetUserById(int id)
+        { 
+            var user = await _context.Users.FirstOrDefaultAsync(e => e.Id == id);
+            if (user == null)
+                throw new NotFoundException("User not found");
+            return user;
+        }
+
         public Task<bool> IsUserExistsByEmail(string email)
         {
             return _context.Users.AnyAsync(e => e.Email == email);
@@ -56,7 +64,7 @@ namespace projektApbd.Server.Services
             return _context.Users.AnyAsync(e => e.Username == username);
         }
 
-        public async Task<projektApbd.Shared.Models.DTOs.UserLoginResponse> Login(Shared.Models.DTOs.UserLoginRequest userLoginRequest)
+        public async Task<Shared.Models.DTOs.UserLoginResponse> Login(Shared.Models.DTOs.UserLoginRequest userLoginRequest)
         {
             var user = await GetUser(userLoginRequest.Username);
 
@@ -65,6 +73,7 @@ namespace projektApbd.Server.Services
 
             var userResponse = new Shared.Models.DTOs.UserLoginResponse
             {
+                Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
                 JwtToken = await _jwtUtils.GenerateToken(user)

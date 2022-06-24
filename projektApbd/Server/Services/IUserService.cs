@@ -7,6 +7,7 @@ namespace projektApbd.Server.Services
         public Task<bool> IsUserExistsByUsername(string username);
         public Task<bool> IsUserExistsByEmail(string email);
         public Task<User> GetUser(string username);
+        public Task<User> GetUserById(int id);
         public Task AddUser(User user);
         public Task Register(Shared.Models.DTOs.User user);
         public Task<projektApbd.Shared.Models.DTOs.UserLoginResponse> Login(projektApbd.Shared.Models.DTOs.UserLoginRequest userLoginRequest);
