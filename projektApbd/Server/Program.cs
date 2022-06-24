@@ -8,6 +8,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<projektApbd.Shared.Models.AppDbContext>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,11 +31,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//app.UseAuthorization();
+
 app.UseSwagger();
-app.UseSwaggerUI(e =>
-{
-    e.SwaggerEndpoint("/swagger/v1/swagger.json", "Blazor API V1");
-});
+app.UseSwaggerUI(e => e.SwaggerEndpoint("/swagger/v1/swagger.json", "Blazor API V1"));
 
 app.MapRazorPages();
 app.MapControllers();

@@ -16,28 +16,11 @@ namespace projektApbd.Server.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetUser(string username)
-        {
-            return Ok(await _userService.GetUser(username));
-        }
-
         [HttpPost]
-        public async Task<IActionResult> AddUser(projektApbd.Shared.Models.DTOs.User user)
+        public async Task<IActionResult> Register(Shared.Models.DTOs.User user)
         {
-            var password = System.Text.Encoding.UTF8.GetBytes(user.Password);
-            await _userService.AddUser(user);
-            return Ok();
-
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult> DeleteUser(projektApbd.Shared.Models.DTOs.User user)
-        {
-            await _userService.DeleteUser(user);
+            await _userService.Register(user);
             return Ok();
         }
-
-
     }
 }
