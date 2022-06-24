@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace projektApbd.Shared.Models.DTOs
 {
-    internal class Company
+    public class Company
     {
-        public int Id { get; set; }
-
         public DateTime Listdate { get; set; }
 
         public string Ticker { get; set; } = string.Empty;
