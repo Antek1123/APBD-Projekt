@@ -9,6 +9,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<projektApbd.Shared.Models.AppDbContext>();
+builder.Services.AddScoped<projektApbd.Server.Services.IUserService, projektApbd.Server.Services.UserService>();
 
 var app = builder.Build();
 
