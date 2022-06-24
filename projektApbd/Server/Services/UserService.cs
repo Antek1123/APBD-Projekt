@@ -28,6 +28,9 @@ namespace projektApbd.Server.Services
 
         public async Task DeleteUser(Shared.Models.DTOs.User user)
         {
+            if (!IsUserExists(user.Username).Result)
+                throw new NotFoundException("User not exists");
+
             var deleteUser = new Shared.Models.User
             {
                 Username = user.Username,
@@ -40,11 +43,16 @@ namespace projektApbd.Server.Services
         }
 
         public async Task<Shared.Models.User> GetUser(string username)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(e => e.Username == username);
-            if (user == null)
+        { 
+            if (IsUserExists(username).Result)
+                return await _context.Users.FirstOrDefaultAsync(e => e.Username == username);
+            else
                 throw new NotFoundException("User not exists");
-            return user;
+        }
+
+        public Task<bool> IsUserExists(string username)
+        {
+            return _context.Users.AnyAsync(e => e.Username == username);
         }
 
         public Task SaveChanges()
