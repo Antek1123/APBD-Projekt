@@ -12,31 +12,34 @@ namespace projektApbd.Shared.Models
     public class DailyOpenClose
     {
         [Required]
-        [Key]
         [ForeignKey("Company")]
         public int Id { get; set; }
 
         [Required]
-        [Key]
         public DateTime Date { get; set; }
 
         [Required]
-        public double Open { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal Open { get; set; }
 
         [Required]
-        public double High { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal High { get; set; }
 
         [Required]
-        public double Low { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal Low { get; set; }
 
         [Required]
-        public double Close { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal Close { get; set; }
 
         [Required]
         [MaxLength(255)]
         public string Volume { get; set; } = string.Empty;
 
-        public double? AfterHours { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? AfterHours { get; set; }
 
         public int? PreMarket { get; set; }
 

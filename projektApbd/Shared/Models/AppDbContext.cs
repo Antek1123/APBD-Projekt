@@ -25,7 +25,7 @@ namespace projektApbd.Shared.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            /*modelBuilder.Entity<User>(e => 
+            /*modelBuilder.Entity<User>(e =>
             {
                 e.HasKey(e => e.Id);
 
@@ -36,7 +36,7 @@ namespace projektApbd.Shared.Models
                 e.ToTable("Users");
             });
 
-            modelBuilder.Entity<Company>(e => 
+            modelBuilder.Entity<Company>(e =>
             {
                 e.HasKey(e => e.Id);
 
@@ -61,10 +61,10 @@ namespace projektApbd.Shared.Models
                 e.ToTable("Companies");
             });
 
-            modelBuilder.Entity<UserCompany>(e => 
+            modelBuilder.Entity<UserCompany>(e =>
             {
                 e.HasKey(e => new
-                {   
+                {
                     e.UserId,
                     e.CompanyId
                 });
@@ -106,12 +106,14 @@ namespace projektApbd.Shared.Models
 
                 e.ToTable("DailyOpenClose");
             });*/
+            modelBuilder.Entity<UserCompany>().HasKey(e => new { e.UserId, e.CompanyId });
+            modelBuilder.Entity<DailyOpenClose>().HasKey(e => new { e.Id, e.Date });
 
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_configuration.GetConnectionString(""));
+            optionsBuilder.UseSqlServer(_configuration.GetConnectionString("Default"));
         }
     }
 }

@@ -12,12 +12,10 @@ namespace projektApbd.Shared.Models
     public class UserCompany
     {
         [Required]
-        [Key]
         [ForeignKey("User")]
         public int UserId { get; set; }
 
         [Required]
-        [Key]
         [ForeignKey("Company")]
         public int CompanyId { get; set; }
         
