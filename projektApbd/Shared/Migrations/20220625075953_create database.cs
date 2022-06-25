@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace projektApbd.Shared.Migrations
 {
-    public partial class first : Migration
+    public partial class createdatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,22 +15,14 @@ namespace projektApbd.Shared.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Listdate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Ticker = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
-                    Industry = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Sector = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Logo = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Employees = table.Column<int>(type: "int", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Ceo = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Homepage_url = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Locale = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
+                    Logo_Url = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Phone_Number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
-                    Exchange = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
-                    HqAddress = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    HqState = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
-                    HqCountry = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
+                    Currency_Name = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     Active = table.Column<bool>(type: "bit", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
@@ -63,9 +55,7 @@ namespace projektApbd.Shared.Migrations
                     High = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Low = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Close = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Volume = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    AfterHours = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    PreMarket = table.Column<int>(type: "int", nullable: true)
+                    Volume = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {

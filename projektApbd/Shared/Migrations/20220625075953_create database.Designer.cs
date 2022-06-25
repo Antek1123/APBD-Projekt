@@ -12,8 +12,8 @@ using projektApbd.Shared.Models;
 namespace projektApbd.Shared.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220625063702_second")]
-    partial class second
+    [Migration("20220625075953_create database")]
+    partial class createdatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -89,9 +89,6 @@ namespace projektApbd.Shared.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("AfterHours")
-                        .HasColumnType("decimal(10,2)");
-
                     b.Property<decimal>("Close")
                         .HasColumnType("decimal(10,2)");
 
@@ -103,9 +100,6 @@ namespace projektApbd.Shared.Migrations
 
                     b.Property<decimal>("Open")
                         .HasColumnType("decimal(10,2)");
-
-                    b.Property<int?>("PreMarket")
-                        .HasColumnType("int");
 
                     b.Property<string>("Volume")
                         .IsRequired()

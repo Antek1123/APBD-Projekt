@@ -53,6 +53,11 @@ namespace projektApbd.Server.Services
             return await _context.Companies.FirstOrDefaultAsync(e => e.Ticker == ticker);
         }
 
+        public async Task<List<DailyOpenClose>> GetDailyOpenCloses(int idCompany, DateTime dateFrom, DateTime dateTo)
+        {
+            return await _context.DailyOpenCloses.Where(e => e.Date > dateFrom && e.Date < dateTo && e.Id == idCompany).ToListAsync();
+        }
+
         public async Task SaveChanges()
         {
             await _context.SaveChangesAsync();

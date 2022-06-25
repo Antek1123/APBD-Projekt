@@ -49,8 +49,6 @@ namespace projektApbd.Server.Controllers
         [HttpPost("{ticker}/{dateFrom}/{dateTo}")]
         public async Task<IActionResult> AddDailyOpenClose(string ticker, string dateFrom, string dateTo)
         {
-            //https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2021-07-22/2021-08-22?adjusted=true&sort=asc&limit=120&apiKey=V9UeRzooTiXCR4RhnXUEpXpapduevCTA
-
             using (var httpClient = new HttpClient())
             {
                 var response = await httpClient.GetStringAsync($"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/{dateFrom}/{dateTo}?adjusted=true&sort=asc&limit=120&apiKey={GetApiKey()}");
@@ -80,5 +78,12 @@ namespace projektApbd.Server.Controllers
                 .AddJsonFile("appsettings.json")
                 .Build()["PolygonApi:ApiKey"];
         }
+
+        [HttpGet("{idCompany}/{dateFrom}/{dateTo}")]
+        public async Task<IActionResult> GetDailyOpenCloses(int idCompany, DateTime dateFrom, DateTime dateTo)
+        {
+            return Ok(await _service.GetDailyOpenCloses(idCompany, dateFrom, dateTo));
+        }
+
     }
 }

@@ -17,9 +17,28 @@ namespace projektApbd.Server.Services
             _jwtUtils = jwtUtils;
         }
 
+        public async Task AddCompanyToWatchlist(int userId, int companyId)
+        {
+            await _context.UserCompanies.AddAsync(new UserCompany
+            {
+                UserId = userId,
+                CompanyId = companyId
+            });
+        }
+
         public async Task AddUser(User user)
         {
             await _context.Users.AddAsync(user);
+        }
+
+        public async void DeleteCompanyFromWatchlist(int userId, int companyId)
+        {
+            var userCompany = new UserCompany
+            {
+                UserId = userId,
+                CompanyId = companyId
+            };
+            _context.Entry(userCompany).State = EntityState.Deleted;
         }
 
         public async Task DeleteUser(Shared.Models.DTOs.User user)

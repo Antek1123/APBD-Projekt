@@ -16,6 +16,8 @@ namespace projektApbd.Shared.Models
         public int Id { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode= true)]
+        [DataType(DataType.DateTime)]
         public DateTime Date { get; set; }
 
         [Required]
