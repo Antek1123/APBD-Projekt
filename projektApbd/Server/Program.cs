@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using projektApbd.Shared.Models;
 using projektApbd.Server.Services;
+using projektApbd.Server.Middlewares;
 using projektApbd.Server.Authorization;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -51,6 +52,8 @@ builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 
+builder.Services.AddScoped<ExceptionMiddleware>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -71,6 +74,8 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseMiddleware<JwtMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
+
 
 app.UseRouting();
 

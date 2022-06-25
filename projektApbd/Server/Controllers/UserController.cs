@@ -44,7 +44,6 @@ namespace projektApbd.Server.Controllers
         public async Task<IActionResult> AddCompanyToWatchlist(int userId, int companyId)
         {
             await _userService.AddCompanyToWatchlist(userId, companyId);
-            await _userService.SaveChanges();
             return Ok();
         }
 
@@ -52,7 +51,6 @@ namespace projektApbd.Server.Controllers
         public async Task<IActionResult> DeleteCompanyFromWatchlist(int userId, int companyId)
         {
             _userService.DeleteCompanyFromWatchlist(userId, companyId);
-            await _userService.SaveChanges();
             return Ok();
         }
     }

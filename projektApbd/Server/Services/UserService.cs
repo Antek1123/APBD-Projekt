@@ -24,6 +24,7 @@ namespace projektApbd.Server.Services
                 UserId = userId,
                 CompanyId = companyId
             });
+            await SaveChanges();
         }
 
         public async Task AddUser(User user)
@@ -31,7 +32,7 @@ namespace projektApbd.Server.Services
             await _context.Users.AddAsync(user);
         }
 
-        public async void DeleteCompanyFromWatchlist(int userId, int companyId)
+        public async Task DeleteCompanyFromWatchlist(int userId, int companyId)
         {
             var userCompany = new UserCompany
             {
@@ -39,6 +40,7 @@ namespace projektApbd.Server.Services
                 CompanyId = companyId
             };
             _context.Entry(userCompany).State = EntityState.Deleted;
+            await SaveChanges();
         }
 
         public async Task DeleteUser(Shared.Models.DTOs.User user)
