@@ -12,29 +12,40 @@ namespace projektApbd.Server.Services
             _context = context;
         }
 
-        public async Task AddCompany(Shared.Models.DTOs.Company model)
+        public async Task<Shared.Models.Company> AddCompany(Shared.Models.DTOs.Company model)
         {
             var company = new Company
             {
-                Listdate = model.Listdate,
+                Id = model.Id,
                 Ticker = model.Ticker,
                 Name = model.Name,
-                Url = model.Url, 
-                Country = model.Country,
-                Industry = model.Industry,
-                Sector = model.Sector,  
-                Logo = model.Logo,
-                Employees = model.Employees,
-                Phone = model.Phone,
-                Ceo = model.Ceo,
+                Homepage_url = model.Homepage_url,
+                Locale = model.Locale,
+                Logo_Url = model.Logo_Url,
+                Phone_Number = model.Phone_Number,
                 Description = model.Description,
-                Exchange = model.Exchange,
-                HqAddress = model.HqAddress,
-                HqState = model.HqState,
-                HqCountry = model.HqCountry,
+                Currency_Name = model.Currency_Name,
                 Active = model.Active
             };
             await _context.AddAsync(company);
+            return company;
+        }
+
+        public async Task<DailyOpenClose> AddDailyCloseValues(Shared.Models.DTOs.PolygonAggregates aggregates, int companyId)
+        {
+            var dailyOpenClose = new DailyOpenClose
+            {
+                Id = companyId,
+                Date = UnixTimeToDateTime(aggregates.T),
+                Open = aggregates.O,
+                High = aggregates.H,
+                Low = aggregates.L,
+                Close = aggregates.C,
+                Volume = aggregates.V
+            };
+            await _context.AddAsync(dailyOpenClose);
+            return dailyOpenClose;
+    
         }
 
         public async Task<Company> GetCompany(string ticker)
@@ -46,5 +57,11 @@ namespace projektApbd.Server.Services
         {
             await _context.SaveChangesAsync();
         }
+        private DateTime UnixTimeToDateTime(long unixtime)
+        {
+            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            return dtDateTime.AddMilliseconds(unixtime).ToLocalTime();
+        }
+
     }
 }

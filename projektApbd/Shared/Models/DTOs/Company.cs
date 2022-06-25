@@ -8,37 +8,23 @@ namespace projektApbd.Shared.Models.DTOs
 {
     public class Company
     {
-        public DateTime Listdate { get; set; }
+        public int Id { get; set; }
 
         public string Ticker { get; set; } = string.Empty;
 
         public string Name { get; set; } = string.Empty;
 
-        public string Url { get; set; } = string.Empty;
+        public string Homepage_url { get; set; } = string.Empty;
 
-        public string Country { get; set; } = string.Empty;
+        public string Locale { get; set; } = string.Empty;
 
-        public string Industry { get; set; } = string.Empty;
+        public string Logo_Url { get; set; } = string.Empty;
 
-        public string Sector { get; set; } = string.Empty;
-
-        public string Logo { get; set; } = string.Empty;
-
-        public int Employees { get; set; }
-
-        public string Phone { get; set; } = string.Empty;
-
-        public string Ceo { get; set; } = string.Empty;
+        public string Phone_Number { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
 
-        public string Exchange { get; set; } = string.Empty;
-
-        public string? HqAddress { get; set; }
-
-        public string? HqState { get; set; }
-
-        public string? HqCountry { get; set; }
+        public string Currency_Name { get; set; } = string.Empty;
 
         public Boolean Active { get; set; }
     }

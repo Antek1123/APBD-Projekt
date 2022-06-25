@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace projektApbd.Shared.Models.DTOs
 {
-    internal class DailyOpenClose
+    public class DailyOpenClose
     {
-        public int Id { get; set; }
-
         public DateTime Date { get; set; }
 
         public decimal Open { get; set; }
@@ -21,9 +19,5 @@ namespace projektApbd.Shared.Models.DTOs
         public decimal Close { get; set; }
 
         public string Volume { get; set; } = string.Empty;
-
-        public decimal? AfterHours { get; set; }
-
-        public int? PreMarket { get; set; }
     }
 }

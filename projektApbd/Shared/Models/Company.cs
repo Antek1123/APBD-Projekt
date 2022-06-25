@@ -11,9 +11,6 @@ namespace projektApbd.Shared.Models
         public int Id { get; set; }
 
         [Required]
-        public DateTime Listdate { get; set; }
-
-        [Required]
         [MaxLength(10)]
         public string Ticker { get; set; } = string.Empty;
 
@@ -24,35 +21,20 @@ namespace projektApbd.Shared.Models
         [Required]
         [MaxLength(255)]
         [DataType(DataType.Url)]
-        public string Url { get; set; } = string.Empty;
+        public string Homepage_url { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(3)]
-        public string Country { get; set; } = string.Empty;
+        public string Locale { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(255)]
-        public string Industry { get; set; } = string.Empty;
-
-        [Required]
-        [MaxLength(255)]
-        public string Sector { get; set; } = string.Empty;
-
-        [Required]
-        [MaxLength(255)]
-        public string Logo { get; set; } = string.Empty;
-
-        [Required]
-        public int Employees { get; set; }
+        public string Logo_Url { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(20)]
         [DataType(DataType.PhoneNumber)]
-        public string Phone { get; set; } = string.Empty;
-
-        [Required]
-        [MaxLength(255)]
-        public string Ceo { get; set; } = string.Empty;
+        public string Phone_Number { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(4000)]
@@ -60,16 +42,7 @@ namespace projektApbd.Shared.Models
 
         [Required]
         [MaxLength(3)]
-        public string Exchange { get; set; } = string.Empty;
-
-        [MaxLength(255)]
-        public string? HqAddress { get; set; }
-
-        [MaxLength(3)]
-        public string? HqState { get; set; }
-
-        [MaxLength(3)]
-        public string? HqCountry { get; set; }
+        public string Currency_Name { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(10)]

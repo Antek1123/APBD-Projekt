@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using projektApbd.Shared.Models;
 
@@ -11,9 +12,10 @@ using projektApbd.Shared.Models;
 namespace projektApbd.Shared.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220625065300_third")]
+    partial class third
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,6 +89,9 @@ namespace projektApbd.Shared.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal?>("AfterHours")
+                        .HasColumnType("decimal(10,2)");
+
                     b.Property<decimal>("Close")
                         .HasColumnType("decimal(10,2)");
 
@@ -98,6 +103,9 @@ namespace projektApbd.Shared.Migrations
 
                     b.Property<decimal>("Open")
                         .HasColumnType("decimal(10,2)");
+
+                    b.Property<int?>("PreMarket")
+                        .HasColumnType("int");
 
                     b.Property<string>("Volume")
                         .IsRequired()

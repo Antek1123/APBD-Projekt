@@ -38,11 +38,6 @@ namespace projektApbd.Shared.Models
         [MaxLength(255)]
         public string Volume { get; set; } = string.Empty;
 
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal? AfterHours { get; set; }
-
-        public int? PreMarket { get; set; }
-
         public virtual Company Company { get; set; }
     }
 }
