@@ -27,7 +27,16 @@ namespace projektApbd.Server.Services
                 Currency_Name = model.Currency_Name,
                 Active = model.Active
             };
-            await _context.AddAsync(company);
+
+            if (IsCompanyExists(company.Ticker).Result)
+            {
+                _context.Entry(company).State = EntityState.Modified;
+            } else
+            {
+                await _context.AddAsync(company);
+            }
+
+            await SaveChanges();
             return company;
         }
 
@@ -56,6 +65,11 @@ namespace projektApbd.Server.Services
         public async Task<List<DailyOpenClose>> GetDailyOpenCloses(int idCompany, DateTime dateFrom, DateTime dateTo)
         {
             return await _context.DailyOpenCloses.Where(e => e.Date > dateFrom && e.Date < dateTo && e.Id == idCompany).ToListAsync();
+        }
+
+        public async Task<bool> IsCompanyExists(string ticker)
+        {
+            return await _context.Companies.AnyAsync(e => e.Ticker == ticker);
         }
 
         public async Task SaveChanges()
