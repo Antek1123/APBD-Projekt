@@ -15,8 +15,7 @@ namespace projektApbd.Server.Services
         public async Task<Company> AddCompany(Shared.Models.DTOs.Company model)
         {
             var company = new Company
-            {
-                Id = model.Id,
+            { 
                 Ticker = model.Ticker,
                 Name = model.Name,
                 Homepage_url = model.Homepage_url,
@@ -31,14 +30,13 @@ namespace projektApbd.Server.Services
             if (IsCompanyExists(company.Ticker).Result)
             {
                 _context.Entry(company).State = EntityState.Modified;
-                await SaveChanges();
                 return company;
                 //_context.Companies.Update(company);
             }
             else
             {
-                //await _context.AddAsync(company);
-                _context.Entry(company).State = EntityState.Added;
+                await _context.AddAsync(company);
+                //_context.Entry(company).State = EntityState.Added;
                 await SaveChanges();
                 return company;
                 //await _context.Companies.AddAsync(company);
@@ -82,7 +80,7 @@ namespace projektApbd.Server.Services
 
         public async Task<bool> IsCompanyExists(string ticker)
         {
-            return await _context.Companies.Where(e => e.Ticker == ticker).AnyAsync();
+            return await _context.Companies.Where(e => e.Ticker.Equals(ticker)).AnyAsync();
         }
 
         public async Task<bool> IsDailyOpenCloseExists(int companyId, DateTime date)

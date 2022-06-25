@@ -25,6 +25,11 @@ namespace projektApbd.Server.Middlewares
                 context.Response.StatusCode = 429;
                 await context.Response.WriteAsync(exc.Message);
             }
+            catch (Exception e)
+            { 
+                context.Response.StatusCode = 500;
+                await context.Response.WriteAsync("Something went wrong.");
+            }
         }
     }
 }

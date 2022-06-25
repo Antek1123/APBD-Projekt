@@ -62,7 +62,7 @@ namespace projektApbd.Server.Services
         public async Task<Shared.Models.User> GetUser(string username)
         { 
             if (IsUserExistsByUsername(username).Result)
-                return await _context.Users.FirstOrDefaultAsync(e => e.Username.Equals(username));
+                return await _context.Users.FirstOrDefaultAsync(e => e.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
             else
                 throw new NotFoundException("User not exists");
         }

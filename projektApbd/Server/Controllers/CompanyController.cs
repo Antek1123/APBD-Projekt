@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using projektApbd.Server.Services;
 using projektApbd.Shared.Models.DTOs;
 using System.Text.Json;
+using System.Transactions;
 
 namespace projektApbd.Server.Controllers
 {
@@ -20,30 +21,35 @@ namespace projektApbd.Server.Controllers
         [HttpPost("{ticker}")]
         public async Task<IActionResult> AddCompany(string ticker)
         {
-            using (var httpClient = new HttpClient())
-            {
-                var response = await httpClient.GetStringAsync(Urls.GetCompanyUrl(ticker));
-                PolygonResponse polygonResponse = JsonConvert.DeserializeObject<PolygonResponse>(response);
-
-                PolygonCompany company = polygonResponse.results;
-                var output = await _service.AddCompany(new Company
+            //using(var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            //{
+                using (var httpClient = new HttpClient())
                 {
-                    Id = company.Id,
-                    Ticker = company.Ticker,
-                    Name = company.Name,
-                    Homepage_url = company.Homepage_url,
-                    Locale = company.Locale,
-                    Logo_Url = company.branding.Logo_Url,
-                    Phone_Number = company.Phone_Number,
-                    Description = company.Description,
-                    Currency_Name = company.Currency_Name,
-                    Active = company.Active
-                });
-                await _service.SaveChanges();
+                    var response = await httpClient.GetStringAsync(Urls.GetCompanyUrl(ticker));
+                    PolygonResponse polygonResponse = JsonConvert.DeserializeObject<PolygonResponse>(response);
 
-                return Ok(output);
-            }
+                    PolygonCompany company = polygonResponse.results;
 
+                    var output = new Company
+                    {
+                        Id = company.Id,
+                        Ticker = company.Ticker,
+                        Name = company.Name,
+                        Homepage_url = company.Homepage_url,
+                        Locale = company.Locale,
+                        Logo_Url = company.branding.Logo_Url,
+                        Phone_Number = company.Phone_Number,
+                        Description = company.Description,
+                        Currency_Name = company.Currency_Name,
+                        Active = company.Active
+                    };
+
+                    await _service.AddCompany(output);
+                    return Ok(output);
+                    //scope.Complete();
+                }
+            //}
+            //return Ok();
         }
 
         [HttpPost("{ticker}/{dateFrom}/{dateTo}")]
