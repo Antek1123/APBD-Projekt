@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using projektApbd.Server.Services;
-using Microsoft.AspNetCore.Authorization;
+using projektApbd.Server.Authorization;
 
 namespace projektApbd.Server.Controllers
 {

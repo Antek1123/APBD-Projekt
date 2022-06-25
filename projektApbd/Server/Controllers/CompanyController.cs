@@ -22,7 +22,7 @@ namespace projektApbd.Server.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                var response = await httpClient.GetStringAsync($"https://api.polygon.io/v3/reference/tickers/{ticker}?apiKey={GetApiKey()}");
+                var response = await httpClient.GetStringAsync(Urls.GetCompanyUrl(ticker));
                 PolygonResponse polygonResponse = JsonConvert.DeserializeObject<PolygonResponse>(response);
 
                 PolygonCompany company = polygonResponse.results;
@@ -51,7 +51,7 @@ namespace projektApbd.Server.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                var response = await httpClient.GetStringAsync($"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/{dateFrom}/{dateTo}?adjusted=true&sort=asc&limit=120&apiKey={GetApiKey()}");
+                var response = await httpClient.GetStringAsync(Urls.GetDailyOpenCloseUrl(ticker, dateFrom, dateTo));
                 PolygonAggregatesResponse polygonAggregatesResponse = JsonConvert.DeserializeObject<PolygonAggregatesResponse>(response);
                 foreach (var dailyOpenClose in polygonAggregatesResponse.Results)
                 {
@@ -65,18 +65,10 @@ namespace projektApbd.Server.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("{ticker}")]
         public async Task<IActionResult> GetCompanyByTicker(string ticker)
         {
             return Ok(await _service.GetCompany(ticker));
-        }
-
-        private string GetApiKey()
-        {
-            return new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build()["PolygonApi:ApiKey"];
         }
 
         [HttpGet("{idCompany}/{dateFrom}/{dateTo}")]
@@ -84,6 +76,5 @@ namespace projektApbd.Server.Controllers
         {
             return Ok(await _service.GetDailyOpenCloses(idCompany, dateFrom, dateTo));
         }
-
     }
 }

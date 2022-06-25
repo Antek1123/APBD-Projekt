@@ -1,4 +1,5 @@
 ﻿using projektApbd.Server.Services;
+using projektApbd.Shared.Models;
 
 namespace projektApbd.Server.Authorization
 
@@ -16,10 +17,14 @@ namespace projektApbd.Server.Authorization
         {
             string token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             int? userId = jwtUtils.ValidateToken(token);
-            if(userId != null)
+
+            if (userId != null)
             {
-                context.Items["User"] = await userService.GetUserById(userId.Value);
+                User? user = await userService.GetUserById(userId.Value);
+                if (user != null)
+                    context.Items["User"] = user;
             }
+
             await _requestDelegate(context);
         }
     }

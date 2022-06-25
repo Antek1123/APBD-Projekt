@@ -12,7 +12,7 @@ namespace projektApbd.Server.Services
             _context = context;
         }
 
-        public async Task<Shared.Models.Company> AddCompany(Shared.Models.DTOs.Company model)
+        public async Task<Company> AddCompany(Shared.Models.DTOs.Company model)
         {
             var company = new Company
             {
@@ -31,13 +31,18 @@ namespace projektApbd.Server.Services
             if (IsCompanyExists(company.Ticker).Result)
             {
                 _context.Entry(company).State = EntityState.Modified;
-            } else
-            {
-                await _context.AddAsync(company);
+                await SaveChanges();
+                return company;
+                //_context.Companies.Update(company);
             }
-
-            await SaveChanges();
-            return company;
+            else
+            {
+                //await _context.AddAsync(company);
+                _context.Entry(company).State = EntityState.Added;
+                await SaveChanges();
+                return company;
+                //await _context.Companies.AddAsync(company);
+            }
         }
 
         public async Task<DailyOpenClose> AddDailyCloseValues(Shared.Models.DTOs.PolygonAggregates aggregates, int companyId)
@@ -52,14 +57,22 @@ namespace projektApbd.Server.Services
                 Close = aggregates.C,
                 Volume = aggregates.V
             };
-            await _context.AddAsync(dailyOpenClose);
+
+            if (IsDailyOpenCloseExists(dailyOpenClose.Id, dailyOpenClose.Date).Result)
+            {
+                //_context.Entry(dailyOpenClose).State = EntityState.Modified;
+            }
+            else
+            {
+                await _context.AddAsync(dailyOpenClose);
+            }
+            await SaveChanges();
             return dailyOpenClose;
-    
         }
 
         public async Task<Company> GetCompany(string ticker)
         {
-            return await _context.Companies.FirstOrDefaultAsync(e => e.Ticker == ticker);
+            return await _context.Companies.FirstOrDefaultAsync(e => e.Ticker.Equals(ticker));
         }
 
         public async Task<List<DailyOpenClose>> GetDailyOpenCloses(int idCompany, DateTime dateFrom, DateTime dateTo)
@@ -69,7 +82,12 @@ namespace projektApbd.Server.Services
 
         public async Task<bool> IsCompanyExists(string ticker)
         {
-            return await _context.Companies.AnyAsync(e => e.Ticker == ticker);
+            return await _context.Companies.Where(e => e.Ticker == ticker).AnyAsync();
+        }
+
+        public async Task<bool> IsDailyOpenCloseExists(int companyId, DateTime date)
+        { 
+            return await _context.DailyOpenCloses.AnyAsync(e => e.Date.Date.Equals(date.Date) && e.Id == companyId);
         }
 
         public async Task SaveChanges()
