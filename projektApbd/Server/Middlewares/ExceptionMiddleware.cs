@@ -20,6 +20,11 @@ namespace projektApbd.Server.Middlewares
                 context.Response.StatusCode = 404;
                 await context.Response.WriteAsync(exc.Message);
             }
+            catch (TooManyRequestException exc)
+            {
+                context.Response.StatusCode = 429;
+                await context.Response.WriteAsync(exc.Message);
+            }
         }
     }
 }
