@@ -42,11 +42,11 @@ namespace projektApbd.Server.Controllers
                         Active = company.Active
                     };
 
-                    return Ok(_service.AddCompany(output));
+                    return Ok(await _service.AddCompany(output));
                 }
             } catch (TooManyRequestException)
             {
-                var company = _service.GetCompany(ticker);
+                Shared.Models.Company company = await _service.GetCompany(ticker);
 
                 if (company == null)
                     throw new NotFoundException("object not exists in database");
@@ -75,6 +75,7 @@ namespace projektApbd.Server.Controllers
             {
                 var dailyOpenCloses = _service.GetDailyOpenCloses(_service.GetCompany(ticker).Result.Id, dateFrom, dateTo);
                 return Ok(dailyOpenCloses);
+                //todo dokonczyc
             }
         }
 
