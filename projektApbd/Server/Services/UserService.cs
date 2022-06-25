@@ -48,21 +48,21 @@ namespace projektApbd.Server.Services
             if (!IsUserExistsByUsername(user.Username).Result)
                 throw new NotFoundException("User not exists");
 
-            var deleteUser = new Shared.Models.User
+            var deleteUser = new User
             {
                 Username = user.Username,
                 Password = user.Password,
                 Email = user.Email
             };
 
-            _context.Entry(deleteUser).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+            _context.Entry(deleteUser).State = EntityState.Deleted;
             await SaveChanges();
         }
 
-        public async Task<Shared.Models.User> GetUser(string username)
+        public async Task<User> GetUser(string username)
         { 
             if (IsUserExistsByUsername(username).Result)
-                return await _context.Users.FirstOrDefaultAsync(e => e.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+                return await _context.Users.FirstOrDefaultAsync(e => e.Username.Equals(username));
             else
                 throw new NotFoundException("User not exists");
         }

@@ -10,7 +10,7 @@ namespace projektApbd.Server.Services
         public Task<User> GetUserById(int id);
         public Task AddUser(User user);
         public Task Register(Shared.Models.DTOs.User user);
-        public Task<projektApbd.Shared.Models.DTOs.UserLoginResponse> Login(projektApbd.Shared.Models.DTOs.UserLoginRequest userLoginRequest);
+        public Task<Shared.Models.DTOs.UserLoginResponse> Login(Shared.Models.DTOs.UserLoginRequest userLoginRequest);
         public Task DeleteUser(Shared.Models.DTOs.User user);
         public Task AddCompanyToWatchlist(int userId, int companyId);
         public Task DeleteCompanyFromWatchlist(int userId, int companyId);

@@ -26,7 +26,8 @@ namespace projektApbd.Server.Middlewares
                 await context.Response.WriteAsync(exc.Message);
             }
             catch (Exception e)
-            { 
+            {
+                Logger.Log(e);
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsync("Something went wrong.");
             }

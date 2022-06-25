@@ -29,17 +29,13 @@ namespace projektApbd.Server.Services
 
             if (IsCompanyExists(company.Ticker).Result)
             {
-                _context.Entry(company).State = EntityState.Modified;
-                return company;
-                //_context.Companies.Update(company);
+                return await GetCompany(company.Ticker);
             }
             else
             {
                 await _context.AddAsync(company);
-                //_context.Entry(company).State = EntityState.Added;
                 await SaveChanges();
                 return company;
-                //await _context.Companies.AddAsync(company);
             }
         }
 
@@ -58,19 +54,24 @@ namespace projektApbd.Server.Services
 
             if (IsDailyOpenCloseExists(dailyOpenClose.Id, dailyOpenClose.Date).Result)
             {
-                //_context.Entry(dailyOpenClose).State = EntityState.Modified;
+                return await GetDailyOpenClose(dailyOpenClose.Id, dailyOpenClose.Date);
             }
             else
             {
                 await _context.AddAsync(dailyOpenClose);
+                await SaveChanges();
+                return dailyOpenClose;
             }
-            await SaveChanges();
-            return dailyOpenClose;
         }
 
         public async Task<Company> GetCompany(string ticker)
         {
             return await _context.Companies.FirstOrDefaultAsync(e => e.Ticker.Equals(ticker));
+        }
+
+        public async Task<DailyOpenClose> GetDailyOpenClose(int idCompany, DateTime date)
+        {
+            return await _context.DailyOpenCloses.FirstOrDefaultAsync(e => e.Id == idCompany && e.Date.Date.Equals(date.Date));
         }
 
         public async Task<List<DailyOpenClose>> GetDailyOpenCloses(int idCompany, DateTime dateFrom, DateTime dateTo)
@@ -92,6 +93,7 @@ namespace projektApbd.Server.Services
         {
             await _context.SaveChangesAsync();
         }
+
         private DateTime UnixTimeToDateTime(long unixtime)
         {
             DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);

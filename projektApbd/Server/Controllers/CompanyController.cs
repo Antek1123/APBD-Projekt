@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using projektApbd.Server.Services;
+using projektApbd.Server.Exceptions;
 using projektApbd.Shared.Models.DTOs;
-using System.Text.Json;
-using System.Transactions;
 
 namespace projektApbd.Server.Controllers
 {
@@ -21,8 +20,8 @@ namespace projektApbd.Server.Controllers
         [HttpPost("{ticker}")]
         public async Task<IActionResult> AddCompany(string ticker)
         {
-            //using(var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            //{
+            try
+            {
                 using (var httpClient = new HttpClient())
                 {
                     var response = await httpClient.GetStringAsync(Urls.GetCompanyUrl(ticker));
@@ -32,7 +31,6 @@ namespace projektApbd.Server.Controllers
 
                     var output = new Company
                     {
-                        Id = company.Id,
                         Ticker = company.Ticker,
                         Name = company.Name,
                         Homepage_url = company.Homepage_url,
@@ -44,31 +42,40 @@ namespace projektApbd.Server.Controllers
                         Active = company.Active
                     };
 
-                    await _service.AddCompany(output);
-                    return Ok(output);
-                    //scope.Complete();
+                    return Ok(_service.AddCompany(output));
                 }
-            //}
-            //return Ok();
+            } catch (TooManyRequestException)
+            {
+                var company = _service.GetCompany(ticker);
+
+                if (company == null)
+                    throw new NotFoundException("object not exists in database");
+
+                return Ok(company);
+            }
         }
 
         [HttpPost("{ticker}/{dateFrom}/{dateTo}")]
-        public async Task<IActionResult> AddDailyOpenClose(string ticker, string dateFrom, string dateTo)
+        public async Task<IActionResult> AddDailyOpenClose(string ticker, DateTime dateFrom, DateTime dateTo)
         {
-            using (var httpClient = new HttpClient())
+            try
             {
-                var response = await httpClient.GetStringAsync(Urls.GetDailyOpenCloseUrl(ticker, dateFrom, dateTo));
-                PolygonAggregatesResponse polygonAggregatesResponse = JsonConvert.DeserializeObject<PolygonAggregatesResponse>(response);
-                foreach (var dailyOpenClose in polygonAggregatesResponse.Results)
+                using (var httpClient = new HttpClient())
                 {
-                    await _service.AddDailyCloseValues(dailyOpenClose, _service.GetCompany(ticker).Result.Id);
-                    await _service.SaveChanges();
+                    var response = await httpClient.GetStringAsync(Urls.GetDailyOpenCloseUrl(ticker, dateFrom.ToString("yyyy-MM-dd"), dateTo.ToString("yyyy-MM-dd")));
+                    PolygonAggregatesResponse polygonAggregatesResponse = JsonConvert.DeserializeObject<PolygonAggregatesResponse>(response);
+                    foreach (var dailyOpenClose in polygonAggregatesResponse.Results)
+                    {
+                        await _service.AddDailyCloseValues(dailyOpenClose, _service.GetCompany(ticker).Result.Id);
+                        await _service.SaveChanges();
+                    }
+                    return Ok(response);
                 }
-                return Ok(response);
-
-
+            } catch (TooManyRequestException)
+            {
+                var dailyOpenCloses = _service.GetDailyOpenCloses(_service.GetCompany(ticker).Result.Id, dateFrom, dateTo);
+                return Ok(dailyOpenCloses);
             }
-
         }
 
         [HttpGet("{ticker}")]
