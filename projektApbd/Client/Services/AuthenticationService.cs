@@ -16,7 +16,6 @@ namespace projektApbd.Client.Services
         private readonly IHttpService _httpService;
         private readonly NavigationManager _navigationManager;
         private readonly ILocalStorageService _localStorageService;
-
         public UserLoginResponse UserResponse { get; private set; } 
 
         public async Task Initialize()

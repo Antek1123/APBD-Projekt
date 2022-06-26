@@ -16,12 +16,12 @@ builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IHttpService, HttpService>();
 builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
 
-//blazor
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjYyMzE4QDMyMzAyZTMxMmUzMGcyTGJML3hiSjB2cmFEWmRXQUVSVlh1UlVWYWt2REhKQlJLUTRpYk12Tms9");
-builder.Services.AddSyncfusionBlazor();
-
 var host = builder.Build();
 var authenticatinService = host.Services.GetRequiredService<IAuthenticationService>();
 await authenticatinService.Initialize();
+
+//blazor
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjYyMzE4QDMyMzAyZTMxMmUzMGcyTGJML3hiSjB2cmFEWmRXQUVSVlh1UlVWYWt2REhKQlJLUTRpYk12Tms9");
+builder.Services.AddSyncfusionBlazor();
 
 await builder.Build().RunAsync();
