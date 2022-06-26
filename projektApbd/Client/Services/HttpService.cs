@@ -32,10 +32,10 @@ namespace projektApbd.Client.Services
             _configuration = configuration;
         }
 
-        public async Task<T> Delete<T>(string uri, object value)
+        public async Task Delete<T>(string uri, object value)
         {
             var request = new HttpRequestMessage(HttpMethod.Delete, uri);
-            return await send<T>(request);
+            await send<T>(request);
         }
 
         public async Task<T> Get<T>(string uri)
