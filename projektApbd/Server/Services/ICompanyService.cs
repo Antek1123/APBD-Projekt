@@ -11,6 +11,7 @@ namespace projektApbd.Server.Services
         public Task<List<DailyOpenClose>> GetDailyOpenCloses(int idCompany, DateTime dateFrom, DateTime dateTo);
         public Task<DailyOpenClose> GetDailyOpenClose(int idCompany, DateTime date);
         public Task<DailyOpenClose> AddDailyCloseValues(Shared.Models.DTOs.PolygonAggregates aggregates, int companyId);
+        public Task<List<string>> GetAllTickers();
         public Task SaveChanges();
     }
 }

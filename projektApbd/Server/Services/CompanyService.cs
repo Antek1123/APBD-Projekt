@@ -88,6 +88,11 @@ namespace projektApbd.Server.Services
             return await _context.DailyOpenCloses.Where(e => e.Date > dateFrom && e.Date < dateTo && e.Id == idCompany).ToListAsync();
         }
 
+        public async Task<List<string>> GetAllTickers()
+        {
+            return await _context.Companies.Select(e => e.Ticker).ToListAsync();
+        }
+
         public async Task<bool> IsCompanyExists(string ticker)
         {
             return await _context.Companies.Where(e => e.Ticker.Equals(ticker)).AnyAsync();

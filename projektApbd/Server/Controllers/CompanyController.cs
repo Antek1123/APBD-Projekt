@@ -96,5 +96,11 @@ namespace projektApbd.Server.Controllers
         {
             return Ok(await _service.GetDailyOpenCloses(idCompany, dateFrom, dateTo));
         }
+
+        [HttpGet("tickers")]
+        public async Task<IActionResult> GetAllTickers()
+        {
+            return Ok(await _service.GetAllTickers());
+        }
     }
 }

@@ -1,0 +1,28 @@
+﻿@page "/register"
+@inject NavigationManager _nav;
+
+<PageTitle>Register</PageTitle>
+
+<h3>Register</h3>
+
+
+<div>
+    <input type="text" placeholder="Username"/>
+    <input type="password" placeholder="Password" />
+    <input type="email" placeholder="Email" />
+    <button @onclick=@NavigateToMainView>Register</button>
+    <button @onclick=@NavigateToLoginPage>Back to login</button>
+</div>
+
+
+@code {
+    private void NavigateToLoginPage()
+    {
+        _nav.NavigateTo("/login");
+    }
+
+    private void NavigateToMainView()
+    {
+        _nav.NavigateTo("/search");
+    }
+}

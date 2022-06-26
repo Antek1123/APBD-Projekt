@@ -1,0 +1,47 @@
+﻿@page "/login"
+@inject IUserService IUserService
+@inject IAuthenticationService IAuthenticationService
+@inject NavigationManager _nav
+
+<PageTitle>Login</PageTitle>
+
+<h3>Login</h3>
+
+<body>
+    <div>
+        <EditForm Model="@userLoginRequest">
+            <input type="text" placeholder="Username" @bind="userLoginRequest.Username"/>
+            <input type="password" placeholder="Password" @bind="userLoginRequest.Password"/>
+            <button @onclick=@NavigateToMainView>Log in</button>
+            <button @onclick=@NavigateToRegisterPage>Register</button>
+        </EditForm>
+    </div  >
+</body>
+
+@code {
+
+    private projektApbd.Shared.Models.DTOs.UserLoginRequest userLoginRequest = new projektApbd.Shared.Models.DTOs.UserLoginRequest();
+
+    private void NavigateToRegisterPage()
+    {
+        _nav.NavigateTo("/register");
+    }
+
+    private void NavigateToMainView()
+    {
+        _nav.NavigateTo("/search");
+    }
+
+    private async void HandleValidSubmit()
+    {
+        try
+        {
+            await IAuthenticationService.Login(userLoginRequest.Username, userLoginRequest.Password);
+        } 
+        catch (Exception ex)
+        {
+            StateHasChanged();
+        }
+    }
+
+}
