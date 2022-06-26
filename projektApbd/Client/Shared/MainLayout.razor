@@ -1,17 +1,18 @@
 ﻿@inherits LayoutComponentBase
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+@if (AuthenticationService.UserResponse != null)
+{
+    <!-- nav -->
+    <nav class="navbar navbar-expand navbar-dark bg-dark">
+        <div class="navbar-nav">
+            <NavLink href="" Match="NavLinkMatch.All" class="nav-item nav-link">Home</NavLink>
+            <NavLink href="logout" class="nav-item nav-link">Logout</NavLink>
         </div>
+    </nav>
+}
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+<div class="container">
+    @Body
 </div>

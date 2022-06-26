@@ -1,9 +1,45 @@
 ﻿@page "/"
+@attribute [Authorize]
+@inject ICompanyService CompanyService;
 
-<PageTitle>Index</PageTitle>
+<div class="card mt-4">
+    <h4 class="card-header">You're logged in with Blazor WebAssembly & JWT!!</h4>
+    <div class="card-body">
+        <h6>Users from secure api end point</h6>
+        <Syncfusion.Blazor.DropDowns.SfAutoComplete TItem="TickerData" TValue="string" DataSource="Tickers"
+            Placeholder="Select a Ticker">
 
-<h1>Hello, world!</h1>
+            <Syncfusion.Blazor.DropDowns.AutoCompleteFieldSettings Value="Ticker">
 
-Welcome to your new app.
+            </Syncfusion.Blazor.DropDowns.AutoCompleteFieldSettings>
+            <Syncfusion.Blazor.Data.SfDataManager 
+                Url="https://localhost:7040/api/Company/tickers"
+                Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"
+                CrossDomain=true>
+            </Syncfusion.Blazor.Data.SfDataManager>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+        </Syncfusion.Blazor.DropDowns.SfAutoComplete>
+    </div>
+</div>
+
+@code {
+
+    public class TickerData
+    {
+        public string Ticker { get; set; }
+    }
+
+    List<TickerData> Tickers = new List<TickerData>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var strings = await CompanyService.GetTickers();
+        foreach(var item in strings)
+        {
+            Tickers.Add(new TickerData
+            {
+                    Ticker = item
+            });
+        }
+    }
+}

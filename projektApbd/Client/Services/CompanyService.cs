@@ -2,19 +2,22 @@
 
 namespace projektApbd.Client.Services
 {
+    public interface ICompanyService
+    {
+        public Task<List<string>> GetTickers();
+    }
     public class CompanyService : ICompanyService
     {
-        private readonly HttpClient _htttpClient;
-        public CompanyService(HttpClient httpclient)
+        private readonly IHttpService _httpService;
+        public CompanyService(IHttpService httpService)
         {
-            _htttpClient = httpclient;
+            _httpService = httpService;
         }
+
         public async Task<List<string>> GetTickers()
         {
-            var list = await _htttpClient.GetFromJsonAsync<List<string>>("api/tickers");
-            if (list == null)
-                throw new Exception();
-            return list;
+            return await _httpService.Get<List<string>>("https://localhost:7040/api/Company/tickers");
+           
         }
     }
 }

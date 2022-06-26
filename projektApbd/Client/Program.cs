@@ -15,10 +15,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IHttpService, HttpService>();
 builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
+builder.Services.AddAuthorizationCore();
 
 var host = builder.Build();
-var authenticatinService = host.Services.GetRequiredService<IAuthenticationService>();
-await authenticatinService.Initialize();
+var authenticationService = host.Services.GetRequiredService<IAuthenticationService>();
+await authenticationService.Initialize();
 
 //blazor
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjYyMzE4QDMyMzAyZTMxMmUzMGcyTGJML3hiSjB2cmFEWmRXQUVSVlh1UlVWYWt2REhKQlJLUTRpYk12Tms9");

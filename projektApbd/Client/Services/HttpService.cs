@@ -3,14 +3,18 @@
 using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Newtonsoft.Json;
+using System.Text;
+using System.Diagnostics;
 
 namespace projektApbd.Client.Services
 {
     public interface IHttpService
     {
         Task<T> Get<T>(string uri);
-        Task<T> Post<T>(string uri, object value);
         Task Delete<T>(string uri, object value);
+        Task<T> Login<T, T2>(T2 requestBody);
+        Task<T> Post<T>(string uri, T requestBody);
     }
     public class HttpService : IHttpService
     {
@@ -44,12 +48,12 @@ namespace projektApbd.Client.Services
             return await send<T>(request);
         }
 
-        public async Task<T> Post<T>(string uri, object value)
+        /*public async Task<T> Post<T>(string uri, object value)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
-            request.Content = new StringContent(JsonSerializer.Serialize(value));
+            request.Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(value));
             return await send<T>(request);
-        }
+        }*/
 
         private async Task<T> send<T>(HttpRequestMessage request)
         {
@@ -66,13 +70,73 @@ namespace projektApbd.Client.Services
                 return default;
             }
 
-            if(!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 var error = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
                 throw new Exception(error["message"]);
             }
 
             return await response.Content.ReadFromJsonAsync<T>();
+        }
+
+        public async Task<T> Login<T, T2>(T2 requestBody)
+        {
+            T resultDate;
+            StringContent data = null;
+
+            try
+            {
+                if (requestBody != null)
+                {
+                    string json = JsonConvert.SerializeObject(requestBody);
+                    data = new StringContent(json, Encoding.UTF8, "application/json");
+                }
+
+                HttpResponseMessage response = await _httpClient.PostAsync("https://localhost:7040/api/User/login", data);
+
+                if (!response.IsSuccessStatusCode) throw new Exception($"PostRequest: Response returned {response.StatusCode}");
+
+                string result = await response.Content.ReadAsStringAsync();
+                resultDate = JsonConvert.DeserializeObject<T>(result);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+                return default;
+            }
+
+            _httpClient.Dispose();
+            return resultDate;
+        }
+
+        public async Task<T> Post<T>(string uri, T requestBody) 
+        {
+            T resultDate;
+            StringContent data = null;
+
+            try
+            {
+                if(requestBody != null)
+                {
+                    string json = JsonConvert.SerializeObject(requestBody);
+                    data = new StringContent(json, Encoding.UTF8, "application/json");
+                }
+
+                HttpResponseMessage response = await _httpClient.PostAsync(uri, data);
+
+                if(!response.IsSuccessStatusCode) throw new Exception($"PosrRequest: Response returned {response.StatusCode}");
+
+                string result = await response.Content.ReadAsStringAsync();
+                resultDate = JsonConvert.DeserializeObject<T>(result);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+                return default;
+            }
+
+            _httpClient.Dispose();
+            return resultDate;
         }
     }
 }

@@ -1,28 +1,86 @@
 ﻿@page "/register"
-@inject NavigationManager _nav;
+@using projektApbd.Shared.Models.DTOs
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.WebUtilities
+@inject NavigationManager NavigationManager;
+@inject IAuthenticationService AuthenticationService;
+
 
 <PageTitle>Register</PageTitle>
 
-<h3>Register</h3>
-
-
-<div>
-    <input type="text" placeholder="Username"/>
-    <input type="password" placeholder="Password" />
-    <input type="email" placeholder="Email" />
-    <button @onclick=@NavigateToMainView>Register</button>
-    <button @onclick=@NavigateToLoginPage>Back to login</button>
+<div class="col-md-6 offset-md-3 mt-5">
+    <div class="card">
+        <h4 class="card-header">Login</h4>
+        <div class="card-body">
+            <EditForm Model="@model" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <div class="form-group">
+                    <label>Username</label>
+                    <InputText @bind-Value="model.Username" class="form-control" />
+                    <ValidationMessage For="@(() => model.Username)" />
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <InputText @bind-Value="model.Email" type="email" class="form-control" />
+                    <ValidationMessage For="@(() => model.Email)" />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <InputText @bind-Value="model.Password" type="password" class="form-control" />
+                    <ValidationMessage For="@(() => model.Password)" />
+                </div>
+                <br>
+                <button class="btn btn-primary">
+                    @if (loading) {
+                        <span class="spinner-border spinner-border-sm mr-1"></span>
+                    }
+                    Register
+                </button>
+                @if (!string.IsNullOrEmpty(error)) {
+                    <div class="alert alert-danger mt-3 mb-0">@error</div>
+                }
+            </EditForm>
+             <button class="btn btn-primary" style="margin-top: 10px" @onclick="@NavigateToLogin">
+                    Back to login
+             </button>
+        </div>
+    </div>
 </div>
 
 
 @code {
-    private void NavigateToLoginPage()
+    private projektApbd.Shared.Models.DTOs.User model = new projektApbd.Shared.Models.DTOs.User();
+    private bool loading;
+    private string error;
+
+    protected override void OnInitialized()
     {
-        _nav.NavigateTo("/login");
+        // redirect to home if already logged in
+        if (AuthenticationService.UserResponse != null)
+        {
+            NavigationManager.NavigateTo("");
+        }
     }
 
-    private void NavigateToMainView()
+    private async void HandleValidSubmit()
     {
-        _nav.NavigateTo("/search");
+        loading = true;
+        try
+        {
+            await AuthenticationService.Register(model);
+            NavigationManager.NavigateTo("/login");
+            
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+            loading = false;
+            StateHasChanged();
+        }
+    }
+
+    private void NavigateToLogin()
+    {
+        NavigationManager.NavigateTo("/login");
     }
 }

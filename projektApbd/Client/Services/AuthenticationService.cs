@@ -10,13 +10,25 @@ namespace projektApbd.Client.Services
         public Task Initialize();
         public Task Login(UserLoginRequest userLoginRequest);
         public Task Logout();
+        public Task Register(User user);
     }
     public class AuthenticationService : IAuthenticationService
-    { 
+    {
         private readonly IHttpService _httpService;
         private readonly NavigationManager _navigationManager;
         private readonly ILocalStorageService _localStorageService;
-        public UserLoginResponse UserResponse { get; private set; } 
+        public UserLoginResponse UserResponse { get; private set; }
+
+        public AuthenticationService(
+            IHttpService httpService,
+            NavigationManager navigationManager,
+            ILocalStorageService localStorageService
+        )
+        {
+            _httpService = httpService;
+            _navigationManager = navigationManager;
+            _localStorageService = localStorageService;
+        }
 
         public async Task Initialize()
         {
@@ -25,7 +37,7 @@ namespace projektApbd.Client.Services
 
         public async Task Login(UserLoginRequest userLoginRequest)
         {
-            UserResponse = await _httpService.Post<UserLoginResponse>("/api/User/login", userLoginRequest);
+            UserResponse = await _httpService.Login<UserLoginResponse, UserLoginRequest>(userLoginRequest);
             await _localStorageService.SetItem("user", UserResponse);
         }
 
@@ -33,7 +45,12 @@ namespace projektApbd.Client.Services
         {
             UserResponse = null;
             await _localStorageService.RemoveItem("user");
-            _navigationManager.NavigateTo("login");
+            _navigationManager.NavigateTo("/login");
+        }
+
+        public async Task Register(User user)
+        {
+            await _httpService.Post<User>("https://localhost:7040/api/User/register", user);
         }
     }
 }
