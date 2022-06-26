@@ -2,7 +2,7 @@
 
 namespace projektApbd.Client.Services
 {
-    public class CompanyService
+    public class CompanyService : ICompanyService
     {
         private readonly HttpClient _htttpClient;
         public CompanyService(HttpClient httpclient)
