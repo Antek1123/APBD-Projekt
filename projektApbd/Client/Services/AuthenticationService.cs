@@ -6,7 +6,7 @@ namespace projektApbd.Client.Services
 {
     public interface IAuthenticationService
     {
-        UserLoginResponse UserResponse { get; }
+        public UserLoginResponse UserResponse { get; }
         public Task Initialize();
         public Task Login(UserLoginRequest userLoginRequest);
         public Task Logout();

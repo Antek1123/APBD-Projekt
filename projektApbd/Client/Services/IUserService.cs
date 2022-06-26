@@ -4,6 +4,6 @@ namespace projektApbd.Client.Services
 {
     public interface IUserService
     {
-        public Task<UserLoginResponse> UserLogin(UserLoginRequest request);
+        
     }
 }

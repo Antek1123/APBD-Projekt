@@ -10,10 +10,5 @@ namespace projektApbd.Client.Services
         {
             _htttpClient = httpclient;
         }
-
-        public Task<UserLoginResponse> UserLogin(UserLoginRequest request)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
