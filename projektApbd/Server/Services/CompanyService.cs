@@ -1,4 +1,5 @@
 ﻿using projektApbd.Shared.Models;
+using projektApbd.Server.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace projektApbd.Server.Services
@@ -27,7 +28,7 @@ namespace projektApbd.Server.Services
                 Active = model.Active
             };
 
-            if (IsCompanyExists(company.Ticker).Result)
+            if (await IsCompanyExists(company.Ticker))
             {
                 return await GetCompany(company.Ticker);
             }
@@ -52,7 +53,7 @@ namespace projektApbd.Server.Services
                 Volume = aggregates.V
             };
 
-            if (IsDailyOpenCloseExists(dailyOpenClose.Id, dailyOpenClose.Date).Result)
+            if (await IsDailyOpenCloseExists(dailyOpenClose.Id, dailyOpenClose.Date))
             {
                 return await GetDailyOpenClose(dailyOpenClose.Id, dailyOpenClose.Date);
             }
@@ -66,12 +67,20 @@ namespace projektApbd.Server.Services
 
         public async Task<Company> GetCompany(string ticker)
         {
-            return await _context.Companies.FirstOrDefaultAsync(e => e.Ticker.Equals(ticker));
+            Company? company = await _context.Companies.FirstOrDefaultAsync(e => e.Ticker.Equals(ticker));
+            if (company == null)
+                throw new NotFoundException("Company not exists");
+
+            return company;
         }
 
         public async Task<DailyOpenClose> GetDailyOpenClose(int idCompany, DateTime date)
         {
-            return await _context.DailyOpenCloses.FirstOrDefaultAsync(e => e.Id == idCompany && e.Date.Date.Equals(date.Date));
+            DailyOpenClose? dailyOpenClose = await _context.DailyOpenCloses.FirstOrDefaultAsync(e => e.Id == idCompany && e.Date.Date.Equals(date.Date));
+            if (dailyOpenClose == null)
+                throw new NotFoundException("Daily open close not exists.");
+
+            return dailyOpenClose;
         }
 
         public async Task<List<DailyOpenClose>> GetDailyOpenCloses(int idCompany, DateTime dateFrom, DateTime dateTo)

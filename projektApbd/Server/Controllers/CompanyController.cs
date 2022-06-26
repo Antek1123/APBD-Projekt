@@ -63,17 +63,23 @@ namespace projektApbd.Server.Controllers
                 using (var httpClient = new HttpClient())
                 {
                     var response = await httpClient.GetStringAsync(Urls.GetDailyOpenCloseUrl(ticker, dateFrom.ToString("yyyy-MM-dd"), dateTo.ToString("yyyy-MM-dd")));
-                    PolygonAggregatesResponse polygonAggregatesResponse = JsonConvert.DeserializeObject<PolygonAggregatesResponse>(response);
-                    foreach (var dailyOpenClose in polygonAggregatesResponse.Results)
+                    PolygonAggregatesResponse? polygonAggregatesResponse = JsonConvert.DeserializeObject<PolygonAggregatesResponse>(response);
+                    if (polygonAggregatesResponse != null)
                     {
-                        await _service.AddDailyCloseValues(dailyOpenClose, _service.GetCompany(ticker).Result.Id);
-                        await _service.SaveChanges();
+                        foreach (var dailyOpenClose in polygonAggregatesResponse.Results)
+                        {
+                            await _service.AddDailyCloseValues(dailyOpenClose, _service.GetCompany(ticker).Result.Id);
+                            await _service.SaveChanges();
+                        }
+                        return Ok(response);
+                    } else
+                    {
+                        return BadRequest(response);
                     }
-                    return Ok(response);
                 }
             } catch (TooManyRequestException)
             {
-                var dailyOpenCloses = _service.GetDailyOpenCloses(_service.GetCompany(ticker).Result.Id, dateFrom, dateTo);
+                var dailyOpenCloses = await _service.GetDailyOpenCloses(_service.GetCompany(ticker).Result.Id, dateFrom, dateTo);
                 return Ok(dailyOpenCloses);
                 //todo dokonczyc
             }
