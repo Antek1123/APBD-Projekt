@@ -97,8 +97,6 @@ namespace projektApbd.Client.Services
                 Trace.TraceError(ex.Message);
                 return default;
             }
-
-            _httpClient.Dispose();
             return resultDate;
         }
 
@@ -128,7 +126,6 @@ namespace projektApbd.Client.Services
                 return default;
             }
 
-            _httpClient.Dispose();
             return resultDate;
         }
 
@@ -151,7 +148,6 @@ namespace projektApbd.Client.Services
                 Trace.TraceError(ex.Message);
                 return default;
             }
-            _httpClient.Dispose();
             return resultDate;
         }
     }

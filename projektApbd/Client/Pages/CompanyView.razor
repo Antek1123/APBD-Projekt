@@ -1,0 +1,47 @@
+﻿@page "/company/{ticker}"
+@attribute [Authorize]
+@inject ICompanyService CompanyService;
+
+@using Syncfusion.Blazor;
+@using Syncfusion.Blazor.Layouts;
+
+<SfDashboardLayout>
+    <DashboardLayoutPanels>
+        <DashboardLayoutPanel>
+                <ContentTemplate>
+                <div>
+                    <p>@Company.Id</p>
+                    <p>@Error</p>
+                </div>
+            </ContentTemplate>
+        </DashboardLayoutPanel>
+    </DashboardLayoutPanels>
+</SfDashboardLayout>
+
+
+@code {
+
+    [Parameter]
+    public string Ticker { get; set; }
+
+    public projektApbd.Shared.Models.Company Company { get; set; }
+    public string Error { get; set; }
+
+    //protected override void OnParametersSet()
+    //{
+    //    var test = Ticker;
+    //}
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Company = await CompanyService.GetCompany(Ticker);
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+            StateHasChanged();
+        }
+    }
+}

@@ -40,18 +40,24 @@ namespace projektApbd.Server.Controllers
             return Ok(await _userService.GetUser(username));
         }
 
-        [HttpPost]
+        [HttpPost("watchlist/")]
         public async Task<IActionResult> AddCompanyToWatchlist(int userId, int companyId)
         {
             await _userService.AddCompanyToWatchlist(userId, companyId);
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("watchlist/")]
         public async Task<IActionResult> DeleteCompanyFromWatchlist(int userId, int companyId)
         {
             _userService.DeleteCompanyFromWatchlist(userId, companyId);
             return Ok();
+        }
+
+        [HttpGet("watchlist/")]
+        public async Task<IActionResult> GetWathclistCompanies(string username)
+        {
+            return Ok(await _userService.GetWatchlistCompanies(username));
         }
     }
 }

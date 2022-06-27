@@ -1,42 +1,28 @@
 ﻿@page "/"
+@using Syncfusion.Blazor.DropDowns
 @attribute [Authorize]
 @inject ICompanyService CompanyService;
+@inject NavigationManager NavigationManager
 
 <div class="card mt-4">
     <h4 class="card-header">You're logged in with Blazor WebAssembly & JWT!!</h4>
     <div class="card-body">
-        <h6>Users from secure api end point</h6>
-        <Syncfusion.Blazor.DropDowns.SfAutoComplete TItem="TickerData" TValue="string" DataSource="Tickers"
+        <h6>Search</h6>
+        <SfAutoComplete TItem="TickerData" TValue="string" DataSource="Tickers"
             Placeholder="Select a Ticker">
 
-            <Syncfusion.Blazor.DropDowns.AutoCompleteFieldSettings Value="Ticker">
+            <AutoCompleteFieldSettings Value="Ticker">
 
-            </Syncfusion.Blazor.DropDowns.AutoCompleteFieldSettings>
-            <Syncfusion.Blazor.Data.SfDataManager 
-                Url="https://localhost:7040/api/Company/tickers"
-                Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"
-                CrossDomain=true>
-            </Syncfusion.Blazor.Data.SfDataManager>
+            </AutoCompleteFieldSettings>
 
-        </Syncfusion.Blazor.DropDowns.SfAutoComplete>
+           <AutoCompleteEvents 
+               TItem="TickerData"
+                TValue="string"
+               OnValueSelect="@NavigateToCompany">
+           </AutoCompleteEvents>
+            
 
-        <p>Output: @error</p>
-
-       <table class='table'>
-        <thead>
-            <tr>
-                <th>Tickers</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var emp in Tickers)
-            {
-                <tr>
-                    <td>@emp.Ticker</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        </SfAutoComplete>
     </div>
 </div>
 
@@ -66,12 +52,12 @@
             error = ex.Message;
             StateHasChanged();
         }
-        //foreach(var item in strings)
-        //{
-        //    Tickers.Add(new TickerData
-        //        {
-        //            Ticker = item
-        //    });
-        //}
     }
+
+    private void NavigateToCompany(SelectEventArgs<TickerData> args)
+    {
+        var ticker = args.ItemData.Ticker;
+        NavigationManager.NavigateTo($"/company/{ticker}");
+    }
+
 }

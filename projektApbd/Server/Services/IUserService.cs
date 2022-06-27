@@ -13,6 +13,7 @@ namespace projektApbd.Server.Services
         public Task<Shared.Models.DTOs.UserLoginResponse> Login(Shared.Models.DTOs.UserLoginRequest userLoginRequest);
         public Task DeleteUser(Shared.Models.DTOs.User user);
         public Task AddCompanyToWatchlist(int userId, int companyId);
+        public Task<List<Shared.Models.DTOs.Company>> GetWatchlistCompanies(string username);
         public Task DeleteCompanyFromWatchlist(int userId, int companyId);
         public Task SaveChanges();
     }

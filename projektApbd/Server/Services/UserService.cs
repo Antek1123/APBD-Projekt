@@ -59,6 +59,23 @@ namespace projektApbd.Server.Services
             await SaveChanges();
         }
 
+        public async Task<List<Shared.Models.DTOs.Company>> GetWatchlistCompanies(string username)
+        {
+            return await _context.UserCompanies.Where(e => e.UserId == GetUser(username).Result.Id).Select(e => new Shared.Models.DTOs.Company
+            {
+                Id = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Id,
+                Ticker = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Ticker,
+                Name = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Name,
+                Homepage_url = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Homepage_url,
+                Locale = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Locale,
+                Logo_Url = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Logo_Url,
+                Phone_Number = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Phone_Number,
+                Description = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Description,
+                Currency_Name = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Currency_Name,
+                Active = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Active
+            }).ToListAsync();
+        }
+
         public async Task<User> GetUser(string username)
         { 
             if (IsUserExistsByUsername(username).Result)
