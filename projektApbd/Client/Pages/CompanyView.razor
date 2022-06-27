@@ -47,7 +47,7 @@
                     <div class="@loadClass">
                     </div>
                     <div class="@loadDiv">
-                        <SfStockChart Title="AAPL Stock Price">
+                        <SfStockChart Title="@Ticker">
                             <StockChartEvents OnLoaded="@ChartLoaded"></StockChartEvents>
                             <StockChartPrimaryXAxis>
                                 <StockChartAxisMajorGridLines Width="0"></StockChartAxisMajorGridLines>
@@ -92,8 +92,12 @@
                  <div style="padding: 10px; margin: 10px">
                 <p style="text-align:center; font-size:200%"><b>Most recent values: </b></p>
                 <text style="font-size:120%">
-                    From date: <b></b> 
-                    @Error
+                    From date: <b>@DailyOpenClose.Date</b> 
+                    Open: <b>@DailyOpenClose.Open</b>
+                    Close: <b>@DailyOpenClose.Close</b>
+                    High: <b>@DailyOpenClose.High</b>
+                    Low: <b>@DailyOpenClose.Low</b>
+                    Volume: <b>@DailyOpenClose.Volume</b>
                 </text>
             </div>
              </ContentTemplate>
@@ -157,6 +161,23 @@
         try
         {
             DailyOpenCloses = await CompanyService.PostDailyOpenCloses(Ticker, DateTime.Now.AddDays(-14), DateTime.Now);
+            ChartData[] output = new ChartData[DailyOpenCloses.Count];
+            int i = 0;
+
+            foreach(var day in DailyOpenCloses)
+            {
+                output[i] = new ChartData
+                    {
+                        x = day.Date,
+                        open = decimal.ToDouble(day.Open),
+                        low = decimal.ToDouble(day.Low),
+                        close = decimal.ToDouble(day.Close),
+                        high = decimal.ToDouble(day.High),
+                        volume = double.Parse(day.Volume)
+                    };
+            }
+
+            DataSource = output;
         }
         catch (Exception ex)
         {
@@ -180,20 +201,8 @@
 
     }
 
+    private ChartData[]? DataSource { get; set; }
 
-    private ChartData[] DataSource = new ChartData[]
-    {
-        new ChartData
-        {
-            x = DateTime.Now,
-            open = 1.1,
-            low = 1.0,
-            close = 5.0,
-            high = 5.0,
-            volume = 1.5
-        }
-    };
-    
     public class ChartData
     {
         public DateTime x { get; set; }
