@@ -7,7 +7,7 @@
 @inject NavigationManager NavigationManager
 
 <div class="card mt-4">
-    <h4 class="card-header">You're logged in with Blazor WebAssembly & JWT!!</h4>
+    <h4 class="card-header">Search</h4>
     <div class="card-body">
         <h6>Search</h6>
 
@@ -32,6 +32,8 @@
             <br/>
 
             <SfButton IsPrimary="true" type="submit" style="margin-top: 10px">Search</SfButton>
+
+            <SfButton typeof="submit" style="margin-top: 10px" @onclick="NavigateToWatchlist">Watchlist</SfButton>
 
         </EditForm>
     </div>
@@ -75,6 +77,11 @@
      private void SearchCompany()
     {
         NavigationManager.NavigateTo($"/company/{model.Ticker.ToUpper()}");
+    }
+
+    private void NavigateToWatchlist()
+    {
+        NavigationManager.NavigateTo("/watchlist");
     }
 
 }
