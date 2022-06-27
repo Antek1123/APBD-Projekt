@@ -8,6 +8,7 @@ namespace projektApbd.Shared.Models.DTOs
 {
     public class DailyOpenCloseRequest
     {
+        public string Ticker { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
     }

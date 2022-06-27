@@ -29,8 +29,9 @@ namespace projektApbd.Client.Services
 
         public async Task<List<DailyOpenClose>> PostDailyOpenCloses(string ticker, DateTime from, DateTime to)
         {
-            return await _httpService.Post<List<DailyOpenClose>>($"https://localhost:7040/api/Company/{ticker}", new DailyOpenCloseRequest
+            return await _httpService.Post<List<DailyOpenClose>>($"https://localhost:7040/api/Company/ticker", new DailyOpenCloseRequest
             { 
+                Ticker = ticker,
                 From = from, 
                 To = to 
             });

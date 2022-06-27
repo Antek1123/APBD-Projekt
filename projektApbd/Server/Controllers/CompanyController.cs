@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using projektApbd.Server.Services;
 using projektApbd.Server.Exceptions;
 using projektApbd.Shared.Models.DTOs;
+using projektApbd.Server.Authorization;
 
 namespace projektApbd.Server.Controllers
 {
@@ -18,6 +19,7 @@ namespace projektApbd.Server.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddCompany([FromBody] string ticker)
         {
             try
@@ -55,20 +57,20 @@ namespace projektApbd.Server.Controllers
             }
         }
 
-        [HttpPost("{ticker}")]
-        public async Task<IActionResult> AddDailyOpenClose([FromRoute] string ticker, [FromBody] DailyOpenCloseRequest request)
+        [HttpPost("ticker")]
+        public async Task<IActionResult> AddDailyOpenClose([FromBody] DailyOpenCloseRequest request)
         {
             try
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var response = await httpClient.GetStringAsync(Urls.GetDailyOpenCloseUrl(ticker, request.From.ToString("yyyy-MM-dd"), request.To.ToString("yyyy-MM-dd")));
+                    var response = await httpClient.GetStringAsync(Urls.GetDailyOpenCloseUrl(request.Ticker, request.From.ToString("yyyy-MM-dd"), request.To.ToString("yyyy-MM-dd")));
                     PolygonAggregatesResponse? polygonAggregatesResponse = JsonConvert.DeserializeObject<PolygonAggregatesResponse>(response);
                     if (polygonAggregatesResponse != null)
                     {
                         foreach (var dailyOpenClose in polygonAggregatesResponse.Results)
                         {
-                            await _service.AddDailyCloseValues(dailyOpenClose, _service.GetCompany(ticker).Result.Id);
+                            await _service.AddDailyCloseValues(dailyOpenClose, _service.GetCompany(request.Ticker).Result.Id);
                             await _service.SaveChanges();
                         }
                         return Ok(response);
@@ -79,7 +81,7 @@ namespace projektApbd.Server.Controllers
                 }
             } catch (TooManyRequestException)
             {
-                var dailyOpenCloses = await _service.GetDailyOpenCloses(_service.GetCompany(ticker).Result.Id, request.From, request.To);
+                var dailyOpenCloses = await _service.GetDailyOpenCloses(_service.GetCompany(request.Ticker).Result.Id, request.From, request.To);
                 return Ok(dailyOpenCloses);
                 //todo dokonczyc
             }

@@ -1,0 +1,66 @@
+﻿@page "/watchlist"
+@attribute [Authorize]
+@inject ICompanyService CompanyService;
+@inject IUserService UserService;
+@using projektApbd.Shared.Models.DTOs;
+
+@using Syncfusion.Blazor;
+@using Syncfusion.Blazor.Layouts;
+@using Syncfusion.Blazor.Grids;
+@using Syncfusion.Blazor.Buttons;
+
+<SfGrid DataSource="@Companies">
+    <GridColumns>
+        <GridColumn Field=@nameof(projektApbd.Shared.Models.DTOs.Company.Ticker) HeaderText="Ticker"></GridColumn>
+        <GridColumn Field=@nameof(projektApbd.Shared.Models.DTOs.Company.Name) HeaderText="Name"></GridColumn>
+        <GridColumn Field=@nameof(projektApbd.Shared.Models.DTOs.Company.Locale) HeaderText="Locale"></GridColumn>
+        <GridColumn Field=@nameof(projektApbd.Shared.Models.DTOs.Company.Active) HeaderText="Active"></GridColumn>
+        @*<GridColumn>
+            <Template>
+                <SfButton Content="Delete" onclick="Delete"></SfButton>
+            </Template>
+        </GridColumn>*@
+        <GridColumn HeaderText="Delete">
+            <Template>
+                @{
+                var company = (context as projektApbd.Shared.Models.DTOs.Company);
+                <button  onclick="Delete(company)">
+                    Delete
+                </button>
+                }
+            </Template>
+        </GridColumn>
+    </GridColumns>
+</SfGrid>
+
+@code {
+
+    public List<projektApbd.Shared.Models.DTOs.Company> Companies { get; set; } = new List<projektApbd.Shared.Models.DTOs.Company>();
+
+    protected override void OnInitialized()
+    {
+        //todo przypisac Companies
+        Companies = new List<projektApbd.Shared.Models.DTOs.Company>()
+        {
+            new projektApbd.Shared.Models.DTOs.Company
+            {
+                Ticker = "ADF",
+                Name = "asdfad",
+                Locale = "us",
+                Active = true
+            },
+            new projektApbd.Shared.Models.DTOs.Company
+            {
+                Ticker = "AASF",
+                Name = "kjkhgpa",
+                Locale = "pl",
+                Active = false
+            }
+        };
+    }
+
+    public void Delete(projektApbd.Shared.Models.DTOs.Company company)
+    {
+        
+    }
+}
