@@ -15,7 +15,6 @@ namespace projektApbd.Client.Services
         Task<T> Get<T>(string uri);
         Task Delete<T>(string uri);
         Task<T> Login<T, T2>(T2 requestBody);
-        Task<T> Post<T>(string uri, T requestBody);
         Task<T> Post<T>(string uri, Object requestBody);
         Task Post(string ui, Object requestBody);
     }
@@ -37,30 +36,6 @@ namespace projektApbd.Client.Services
             _navigationMenager = navigationManager;
             _localStorageService = localStorageService;
             _configuration = configuration;
-        }
-
-        private async Task<T> send<T>(HttpRequestMessage request)
-        {
-            var user = await _localStorageService.GetItem<UserLoginResponse>("user");
-            var isApiUrl = !request.RequestUri.IsAbsoluteUri;
-            if (user != null && isApiUrl)
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", user.JwtToken);
-
-            using var response = await _httpClient.SendAsync(request);
-
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                _navigationMenager.NavigateTo("login");
-                return default;
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                var error = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
-                throw new Exception(error["message"]);
-            }
-
-            return await response.Content.ReadFromJsonAsync<T>();
         }
 
         public async Task<T> Login<T, T2>(T2 requestBody)
@@ -88,37 +63,6 @@ namespace projektApbd.Client.Services
                 Trace.TraceError(ex.Message);
                 return default;
             }
-            return resultDate;
-        }
-
-        public async Task<T> Post<T>(string uri, T requestBody) 
-        {
-            T resultDate;
-            StringContent data = null;
-
-            try
-            {
-                if(requestBody != null)
-                {
-                    string json = JsonConvert.SerializeObject(requestBody);
-                    data = new StringContent(json, Encoding.UTF8, "application/json");
-                }
-
-                var user = await _localStorageService.GetItem<UserLoginResponse>("user");
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.JwtToken);
-                HttpResponseMessage response = await _httpClient.PostAsync(uri, data);
-
-                if(!response.IsSuccessStatusCode) throw new Exception($"PosrRequest: Response returned {response.StatusCode}");
-
-                string result = await response.Content.ReadAsStringAsync();
-                resultDate = JsonConvert.DeserializeObject<T>(result);
-            }
-            catch (Exception ex)
-            {
-                Trace.TraceError(ex.Message);
-                return default;
-            }
-
             return resultDate;
         }
 
