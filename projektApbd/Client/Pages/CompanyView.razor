@@ -47,7 +47,7 @@
                     <div class="@loadClass">
                     </div>
                     <div class="@loadDiv">
-                        <SfStockChart Title="@Ticker">
+                        @*<SfStockChart Title="@Ticker">
                             <StockChartEvents OnLoaded="@ChartLoaded"></StockChartEvents>
                             <StockChartPrimaryXAxis>
                                 <StockChartAxisMajorGridLines Width="0"></StockChartAxisMajorGridLines>
@@ -65,6 +65,42 @@
                             <StockChartChartArea>
                                 <StockChartChartAreaBorder Width="0"></StockChartChartAreaBorder>
                             </StockChartChartArea>
+                        </SfStockChart>*@
+
+                         <SfStockChart Title="@Company.Name">
+                            <StockChartCrosshairSettings Enable="true"></StockChartCrosshairSettings>
+
+                            @*<StockChartPeriods>
+                                <StockChartPeriod IntervalType="RangeIntervalType.Days" Interval="1" Text="1D"></StockChartPeriod>
+                                <StockChartPeriod IntervalType="RangeIntervalType.Weeks" Interval="1" Text="1W" Selected="true"></StockChartPeriod>
+                                <StockChartPeriod IntervalType="RangeIntervalType.Months" Interval="1" Text="1M"></StockChartPeriod>
+                                <StockChartPeriod IntervalType="RangeIntervalType.Months" Interval="3" Text="3M"></StockChartPeriod>
+                            </StockChartPeriods>*@
+
+                            <StockChartEvents OnLoaded="@ChartLoaded"></StockChartEvents>
+
+                            <StockChartPrimaryXAxis>
+                                <StockChartAxisMajorGridLines Width="0"></StockChartAxisMajorGridLines>
+                                <StockChartAxisCrosshairTooltip Enable="true"></StockChartAxisCrosshairTooltip>
+                            </StockChartPrimaryXAxis>
+
+                            <StockChartPrimaryYAxis>
+                                <StockChartAxisLineStyle Width="0"></StockChartAxisLineStyle>
+                                <StockChartAxisMajorTickLines Width="0"></StockChartAxisMajorTickLines>
+                            </StockChartPrimaryYAxis>
+
+                            <StockChartTooltipSettings Enable="true"></StockChartTooltipSettings>
+
+                            <StockChartCrosshairSettings Enable="true"></StockChartCrosshairSettings>
+
+                            <StockChartSeriesCollection>
+                                <StockChartSeries DataSource="@DataSource" Type="ChartSeriesType.HiloOpenClose" XName="date"></StockChartSeries>
+                            </StockChartSeriesCollection>
+
+                            <StockChartChartArea>
+                                <StockChartChartAreaBorder Width="0"></StockChartChartAreaBorder>
+                            </StockChartChartArea>
+
                         </SfStockChart>
                     </div>
                     <style>
@@ -92,12 +128,12 @@
                  <div style="padding: 10px; margin: 10px">
                 <p style="text-align:center; font-size:200%"><b>Most recent values: </b></p>
                 <text style="font-size:120%">
-                    From date: <b>@DailyOpenClose.Date</b> 
+                    @*From date: <b>@DailyOpenClose.T</b> 
                     Open: <b>@DailyOpenClose.Open</b>
                     Close: <b>@DailyOpenClose.Close</b>
                     High: <b>@DailyOpenClose.High</b>
                     Low: <b>@DailyOpenClose.Low</b>
-                    Volume: <b>@DailyOpenClose.Volume</b>
+                    Volume: <b>@DailyOpenClose.Volume</b>*@
                 </text>
             </div>
              </ContentTemplate>
@@ -127,8 +163,8 @@
     public string Ticker { get; set; }
 
     public projektApbd.Shared.Models.DTOs.Company Company { get; set; } = new projektApbd.Shared.Models.DTOs.Company();
-    public projektApbd.Shared.Models.DTOs.DailyOpenClose DailyOpenClose { get; set; } = new projektApbd.Shared.Models.DTOs.DailyOpenClose();
-    public List<projektApbd.Shared.Models.DTOs.DailyOpenClose> DailyOpenCloses { get; set; } = new List<projektApbd.Shared.Models.DTOs.DailyOpenClose>();
+    public projektApbd.Shared.Models.DTOs.PolygonAggregates DailyOpenClose { get; set; } = new projektApbd.Shared.Models.DTOs.PolygonAggregates();
+    public List<projektApbd.Shared.Models.DTOs.PolygonAggregates> DailyOpenCloses { get; set; } = new List<projektApbd.Shared.Models.DTOs.PolygonAggregates>();
 
     public string Error { get; set; }
 
@@ -168,16 +204,16 @@
             {
                 output[i] = new ChartData
                     {
-                        x = day.Date,
-                        open = decimal.ToDouble(day.Open),
-                        low = decimal.ToDouble(day.Low),
-                        close = decimal.ToDouble(day.Close),
-                        high = decimal.ToDouble(day.High),
-                        volume = double.Parse(day.Volume)
+                        x =  UnixTimeToDateTime(day.T),
+                        open = decimal.ToDouble(day.O),
+                        low = decimal.ToDouble(day.L),
+                        close = decimal.ToDouble(day.C),
+                        high = decimal.ToDouble(day.H),
+                        volume = double.Parse(day.V)
                     };
             }
 
-            DataSource = output;
+            //DataSource = output;
         }
         catch (Exception ex)
         {
@@ -201,7 +237,18 @@
 
     }
 
-    private ChartData[]? DataSource { get; set; }
+    private ChartData[]? DataSource { get; set; } = new ChartData[]
+    {
+        new ChartData
+        {
+            x = DateTime.Now,
+            open = 1.4,
+            close = 1.5,
+            high = 1.5,
+            low = 1.3,
+            volume = 1.4,
+        }
+    };
 
     public class ChartData
     {
@@ -222,5 +269,9 @@
         StateHasChanged();
     }
 
-
+    private DateTime UnixTimeToDateTime(long unixtime)
+        {
+            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            return dtDateTime.AddMilliseconds(unixtime).ToLocalTime();
+        }
 }
