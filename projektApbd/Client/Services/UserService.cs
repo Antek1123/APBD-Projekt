@@ -19,9 +19,10 @@ namespace projektApbd.Client.Services
             _localStorage = localStorage;
         }
 
-        public Task DeleteCompanyFromWatchlist(int companyId)
+        public async Task DeleteCompanyFromWatchlist(int companyId)
         {
-            throw new NotImplementedException();
+            var userId = _localStorage.GetItem<UserLoginResponse>("user").Id;
+            //return await 
         }
 
         public async Task<List<Company>> GetWatchlistCompany()

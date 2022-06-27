@@ -13,7 +13,7 @@ namespace projektApbd.Client.Services
     public interface IHttpService
     {
         Task<T> Get<T>(string uri);
-        Task Delete<T>(string uri, object value);
+        Task Delete<T>(string uri);
         Task<T> Login<T, T2>(T2 requestBody);
         Task<T> Post<T>(string uri, T requestBody);
         Task<T> Post<T>(string uri, Object requestBody);
@@ -38,18 +38,6 @@ namespace projektApbd.Client.Services
             _localStorageService = localStorageService;
             _configuration = configuration;
         }
-
-        public async Task Delete<T>(string uri, object value)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Delete, uri);
-            await send<T>(request);
-        }
-
-        //public async Task<T> Get<T>(string uri)
-        //{
-         //   var request = new HttpRequestMessage(HttpMethod.Get, uri);
-        //    return await send<T>(request);
-        //}
 
         private async Task<T> send<T>(HttpRequestMessage request)
         {
@@ -203,6 +191,25 @@ namespace projektApbd.Client.Services
                 var user = await _localStorageService.GetItem<UserLoginResponse>("user");
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.JwtToken);
                 HttpResponseMessage response = await _httpClient.PostAsync(uri, data);
+
+                if (!response.IsSuccessStatusCode) throw new Exception($"PostRequest: Response returned {response.StatusCode}");
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+            }
+        }
+
+        public async Task Delete<T>(string uri)
+        {
+            T resultDate;
+            StringContent data = null;
+
+            try
+            {
+                var user = await _localStorageService.GetItem<UserLoginResponse>("user");
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.JwtToken);
+                HttpResponseMessage response = await _httpClient.DeleteAsync(uri);
 
                 if (!response.IsSuccessStatusCode) throw new Exception($"PostRequest: Response returned {response.StatusCode}");
             }

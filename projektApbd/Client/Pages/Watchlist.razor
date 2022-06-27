@@ -9,7 +9,7 @@
 @using Syncfusion.Blazor.Grids;
 @using Syncfusion.Blazor.Buttons;
 
-<SfGrid DataSource="@Companies">
+@*<SfGrid DataSource="@Companies">
     <GridColumns>
         <GridColumn Field=@nameof(projektApbd.Shared.Models.DTOs.Company.Ticker) HeaderText="Ticker"></GridColumn>
         <GridColumn Field=@nameof(projektApbd.Shared.Models.DTOs.Company.Name) HeaderText="Name"></GridColumn>
@@ -20,7 +20,7 @@
                 <SfButton Content="Delete" onclick="Delete"></SfButton>
             </Template>
         </GridColumn>*@
-        <GridColumn HeaderText="Delete">
+@*        <GridColumn HeaderText="Delete">
             <Template>
                 @{
                 var company = (context as projektApbd.Shared.Models.DTOs.Company);
@@ -31,7 +31,29 @@
             </Template>
         </GridColumn>
     </GridColumns>
-</SfGrid>
+</SfGrid>*@
+
+<table class="table">
+    <thead>
+    <td>Ticker</td>
+    <td>Name</td>
+    <td>Locale</td>
+    <td>Active</td>
+    <td>Delete</td>
+    </thead>
+
+    @foreach (projektApbd.Shared.Models.DTOs.Company company in Companies)
+        {
+<tr>
+    <td>@company.Ticker</td>
+    <td>@company.Name</td>
+    <td>@company.Locale</td>
+    <td>@company.Active</td>
+    <td><button type="submit" class="btn btn-outline-danger" onclick="@(() => Delete(company))">DELETE</button></td>
+</tr>
+        }
+
+</table>
 
 @code {
 
@@ -49,8 +71,8 @@
         }
 
     }
-    public void Delete(projektApbd.Shared.Models.DTOs.Company company)
+    public async Task Delete(projektApbd.Shared.Models.DTOs.Company company)
     {
-
+        await UserService.DeleteCompanyFromWatchlist(company.Id);
     }
 }
