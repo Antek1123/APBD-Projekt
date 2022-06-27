@@ -29,7 +29,7 @@
                     <text style="font-size:120%">
                         Ticker: <b>@Company.Ticker</b> <br/>
                         Active: <b>@Company.Active</b> <br /> 
-                        Homepage:<b>@Company.Homepage_url</b> <br /> 
+                        Homepage: <b>@Company.Homepage_url</b> <br /> 
                         Phone number: <b>@Company.Phone_Number</b> <br /> 
                         Locale: <b>@Company.Locale</b> <br /> 
                         Currency: <b>@Company.Currency_Name</b> </text>
@@ -53,10 +53,10 @@
                             <StockChartCrosshairSettings Enable="true"></StockChartCrosshairSettings>
 
                             <StockChartPeriods>
-                                <StockChartPeriod IntervalType="RangeIntervalType.Days" Interval="1" Text="1D"></StockChartPeriod>
-                                <StockChartPeriod IntervalType="RangeIntervalType.Weeks" Interval="1" Text="1W" Selected="true"></StockChartPeriod>
-                                <StockChartPeriod IntervalType="RangeIntervalType.Months" Interval="1" Text="1M"></StockChartPeriod>
-                                <StockChartPeriod IntervalType="RangeIntervalType.Months" Interval="3" Text="3M"></StockChartPeriod>
+                                <StockChartPeriod IntervalType="RangeIntervalType.Days" Interval="1" Text="Day" Selected="true"></StockChartPeriod>
+                                <StockChartPeriod IntervalType="RangeIntervalType.Days" Interval="7" Text="Week"></StockChartPeriod>
+                                <StockChartPeriod IntervalType="RangeIntervalType.Months" Interval="1" Text="Month"></StockChartPeriod>
+                                <StockChartPeriod IntervalType="RangeIntervalType.Months" Interval="3" Text="3 Months"></StockChartPeriod>
                             </StockChartPeriods>
 
                             <StockChartEvents OnLoaded="@ChartLoaded"></StockChartEvents>
@@ -77,42 +77,6 @@
                                 <StockChartChartAreaBorder Width="0"></StockChartChartAreaBorder>
                             </StockChartChartArea>
                         </SfStockChart>
-
-                         @*<SfStockChart Title="@Company.Name">
-                            <StockChartCrosshairSettings Enable="true"></StockChartCrosshairSettings>
-
-                            @*<StockChartPeriods>
-                                <StockChartPeriod IntervalType="RangeIntervalType.Days" Interval="1" Text="1D"></StockChartPeriod>
-                                <StockChartPeriod IntervalType="RangeIntervalType.Weeks" Interval="1" Text="1W" Selected="true"></StockChartPeriod>
-                                <StockChartPeriod IntervalType="RangeIntervalType.Months" Interval="1" Text="1M"></StockChartPeriod>
-                                <StockChartPeriod IntervalType="RangeIntervalType.Months" Interval="3" Text="3M"></StockChartPeriod>
-                            </StockChartPeriods>*@
-@*
-                            <StockChartEvents OnLoaded="@ChartLoaded"></StockChartEvents>
-
-                            <StockChartPrimaryXAxis>
-                                <StockChartAxisMajorGridLines Width="0"></StockChartAxisMajorGridLines>
-                                <StockChartAxisCrosshairTooltip Enable="true"></StockChartAxisCrosshairTooltip>
-                            </StockChartPrimaryXAxis>
-
-                            <StockChartPrimaryYAxis>
-                                <StockChartAxisLineStyle Width="0"></StockChartAxisLineStyle>
-                                <StockChartAxisMajorTickLines Width="0"></StockChartAxisMajorTickLines>
-                            </StockChartPrimaryYAxis>
-
-                            <StockChartTooltipSettings Enable="true"></StockChartTooltipSettings>
-
-                            <StockChartCrosshairSettings Enable="true"></StockChartCrosshairSettings>
-
-                            <StockChartSeriesCollection>
-                                <StockChartSeries DataSource="@DataSource" Type="ChartSeriesType.HiloOpenClose" XName="date"></StockChartSeries>
-                            </StockChartSeriesCollection>
-
-                            <StockChartChartArea>
-                                <StockChartChartAreaBorder Width="0"></StockChartChartAreaBorder>
-                            </StockChartChartArea>
-
-                        </SfStockChart>*@
                     </div>
                     <style>
                         .stockchartloader {
@@ -134,17 +98,17 @@
                 }
             </ContentTemplate>
         </DashboardLayoutPanel>
-        <DashboardLayoutPanel SizeX="1" SizeY="2">
+        <DashboardLayoutPanel SizeX="1" SizeY="1">
             <ContentTemplate>
                  <div style="padding: 10px; margin: 10px">
                 <p style="text-align:center; font-size:200%"><b>Most recent values: </b></p>
                 <text style="font-size:120%">
-                    @*From date: <b>@DailyOpenClose.T</b> 
-                    Open: <b>@DailyOpenClose.Open</b>
-                    Close: <b>@DailyOpenClose.Close</b>
-                    High: <b>@DailyOpenClose.High</b>
-                    Low: <b>@DailyOpenClose.Low</b>
-                    Volume: <b>@DailyOpenClose.Volume</b>*@
+                    From date: <b>@DailyOpenClose.Date</b> <br/>
+                    Open: <b>@DailyOpenClose.Open</b> <br/>
+                    Close: <b>@DailyOpenClose.Close</b> <br/>
+                    High: <b>@DailyOpenClose.High</b> <br/>
+                    Low: <b>@DailyOpenClose.Low</b><br/>
+                    Volume: <b>@DailyOpenClose.Volume</b ><br/>
                 </text>
             </div>
              </ContentTemplate>
@@ -210,6 +174,7 @@
             await CompanyService.PostDailyOpenCloses(Ticker, DateTime.Now.AddDays(-91), DateTime.Now);
             DailyOpenCloses = await CompanyService.GetDailyOpenCloses(Company.Id, DateTime.Now.AddDays(-91), DateTime.Now);
             ChartData[] output = new ChartData[DailyOpenCloses.Count];
+            DailyOpenClose = DailyOpenCloses.Last();
 
             if(DailyOpenCloses == null){
                 return;
@@ -224,9 +189,9 @@
                         open = decimal.ToDouble(day.Open),
                         low = decimal.ToDouble(day.Low),
                         close = decimal.ToDouble(day.Close),
-                        high = decimal.ToDouble(day.High),
-                        volume = 1
+                        high = decimal.ToDouble(day.High)
                     };
+                    output[i].volume = double.TryParse(day.Volume, out double volume) ? Convert.ToDouble(volume) : 1;
             }
 
 

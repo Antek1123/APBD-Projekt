@@ -99,8 +99,10 @@ namespace projektApbd.Shared.Migrations
                     b.Property<decimal>("Open")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<decimal>("Volume")
-                        .HasColumnType("decimal(10,2)");
+                    b.Property<string>("Volume")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id", "Date");
 

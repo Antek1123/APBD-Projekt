@@ -18,6 +18,6 @@ namespace projektApbd.Shared.Models.DTOs
         public decimal L { get; set; }
         public decimal O { get; set; }
         public long T { get; set; }
-        public decimal V { get; set; }
+        public string V { get; set; }
     }
 }
