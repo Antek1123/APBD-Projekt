@@ -7,7 +7,8 @@ namespace projektApbd.Client.Services
     {
         public Task<List<string>> GetTickers();
         public Task<Company> PostCompany(string ticker);
-        public Task<List<PolygonAggregates>> PostDailyOpenCloses(string ticker, DateTime from, DateTime to);
+        public Task PostDailyOpenCloses(string ticker, DateTime from, DateTime to);
+        public Task<List<DailyOpenClose>> GetDailyOpenCloses(int id, DateTime from, DateTime to);
     }
     public class CompanyService : ICompanyService
     {
@@ -27,14 +28,23 @@ namespace projektApbd.Client.Services
             return await _httpService.Post<Company>("https://localhost:7040/api/Company", ticker);
         }
 
-        public async Task<List<PolygonAggregates>> PostDailyOpenCloses(string ticker, DateTime from, DateTime to)
+        public async Task PostDailyOpenCloses(string ticker, DateTime from, DateTime to)
         {
-            return await _httpService.Post<List<PolygonAggregates>>($"https://localhost:7040/api/Company/ticker", new DailyOpenCloseRequest
+            await _httpService.Post($"https://localhost:7040/api/Company/ticker", new DailyOpenCloseRequest
             { 
                 Ticker = ticker,
                 From = from, 
                 To = to 
             });
+        }
+
+        public async Task<List<DailyOpenClose>> GetDailyOpenCloses(int id, DateTime from, DateTime to)
+        {
+            var fromString = from.ToString("yyyy-MM-dd");
+            var toString = to.ToString("yyyy-MM-dd");
+
+            //return await _httpService.Get<List<DailyOpenClose>>($"https://localhost:7040/api/Company/{id}/{fromString}/{toString}");
+            return await _httpService.Get<List<DailyOpenClose>>("https://localhost:7040/api/Company/14/2022-06-20/2022-06-27");
         }
     }
 }

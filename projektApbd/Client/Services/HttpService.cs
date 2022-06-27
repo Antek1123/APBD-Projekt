@@ -17,6 +17,7 @@ namespace projektApbd.Client.Services
         Task<T> Login<T, T2>(T2 requestBody);
         Task<T> Post<T>(string uri, T requestBody);
         Task<T> Post<T>(string uri, Object requestBody);
+        Task Post(string ui, Object requestBody);
     }
     public class HttpService : IHttpService
     {
@@ -185,6 +186,30 @@ namespace projektApbd.Client.Services
             }
 
             return resultDate;
+        }
+
+        public async Task Post(string uri, object requestBody)
+        {
+            StringContent data = null;
+
+            try
+            {
+                if (requestBody != null)
+                {
+                    string json = JsonConvert.SerializeObject(requestBody);
+                    data = new StringContent(json, Encoding.UTF8, "application/json");
+                }
+
+                var user = await _localStorageService.GetItem<UserLoginResponse>("user");
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.JwtToken);
+                HttpResponseMessage response = await _httpClient.PostAsync(uri, data);
+
+                if (!response.IsSuccessStatusCode) throw new Exception($"PostRequest: Response returned {response.StatusCode}");
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+            }
         }
     }
 }
