@@ -9,6 +9,7 @@ namespace projektApbd.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CompanyController : Controller
     {
         private readonly ICompanyService _service;
