@@ -50,7 +50,7 @@ namespace projektApbd.Client.Services
 
         public async Task Register(User user)
         {
-            await _httpService.Post<User>("https://localhost:7040/api/User/register", user);
+            await _httpService.Post("https://localhost:7040/api/User/register", user);
         }
     }
 }
