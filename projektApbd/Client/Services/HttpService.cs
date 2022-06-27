@@ -115,6 +115,8 @@ namespace projektApbd.Client.Services
                     data = new StringContent(json, Encoding.UTF8, "application/json");
                 }
 
+                var user = await _localStorageService.GetItem<UserLoginResponse>("user");
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.JwtToken);
                 HttpResponseMessage response = await _httpClient.PostAsync(uri, data);
 
                 if(!response.IsSuccessStatusCode) throw new Exception($"PosrRequest: Response returned {response.StatusCode}");
