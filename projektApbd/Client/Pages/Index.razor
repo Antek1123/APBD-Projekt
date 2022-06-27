@@ -19,10 +19,29 @@
             </Syncfusion.Blazor.Data.SfDataManager>
 
         </Syncfusion.Blazor.DropDowns.SfAutoComplete>
+
+        <p>Output: @error</p>
+
+       <table class='table'>
+        <thead>
+            <tr>
+                <th>Tickers</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var emp in Tickers)
+            {
+                <tr>
+                    <td>@emp.Ticker</td>
+                </tr>
+            }
+        </tbody>
+    </table>
     </div>
 </div>
 
 @code {
+    private string error;
 
     public class TickerData
     {
@@ -33,13 +52,26 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var strings = await CompanyService.GetTickers();
-        foreach(var item in strings)
-        {
-            Tickers.Add(new TickerData
+        try {
+            var strings = await CompanyService.GetTickers();
+            foreach(var item in strings)
             {
-                    Ticker = item
-            });
+                Tickers.Add(new TickerData
+                    {
+                        Ticker = item
+                    });
+            }
+        } catch(Exception ex)
+        {
+            error = ex.Message;
+            StateHasChanged();
         }
+        //foreach(var item in strings)
+        //{
+        //    Tickers.Add(new TickerData
+        //        {
+        //            Ticker = item
+        //    });
+        //}
     }
 }

@@ -10,7 +10,7 @@
 
 <div class="col-md-6 offset-md-3 mt-5">
     <div class="card">
-        <h4 class="card-header">Login</h4>
+        <h4 class="card-header">Register</h4>
         <div class="card-body">
             <EditForm Model="@model" OnValidSubmit="HandleValidSubmit">
                 <DataAnnotationsValidator />
@@ -55,7 +55,6 @@
 
     protected override void OnInitialized()
     {
-        // redirect to home if already logged in
         if (AuthenticationService.UserResponse != null)
         {
             NavigationManager.NavigateTo("");
@@ -68,7 +67,18 @@
         try
         {
             await AuthenticationService.Register(model);
-            NavigationManager.NavigateTo("/login");
+
+            await AuthenticationService.Login(new UserLoginRequest
+            {
+                Username = model.Username,
+                Password = model.Password
+            });
+            var query = new Uri(NavigationManager.Uri).Query;
+            var queryStrings = QueryHelpers.ParseQuery(query);
+            if(queryStrings.TryGetValue("returnUrl", out var returnUrl))
+            {
+                NavigationManager.NavigateTo(returnUrl);
+            }
             
         }
         catch (Exception ex)

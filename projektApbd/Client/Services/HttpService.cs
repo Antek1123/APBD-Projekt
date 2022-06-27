@@ -42,18 +42,11 @@ namespace projektApbd.Client.Services
             await send<T>(request);
         }
 
-        public async Task<T> Get<T>(string uri)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, uri);
-            return await send<T>(request);
-        }
-
-        /*public async Task<T> Post<T>(string uri, object value)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Post, uri);
-            request.Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(value));
-            return await send<T>(request);
-        }*/
+        //public async Task<T> Get<T>(string uri)
+        //{
+         //   var request = new HttpRequestMessage(HttpMethod.Get, uri);
+        //    return await send<T>(request);
+        //}
 
         private async Task<T> send<T>(HttpRequestMessage request)
         {
@@ -135,6 +128,29 @@ namespace projektApbd.Client.Services
                 return default;
             }
 
+            _httpClient.Dispose();
+            return resultDate;
+        }
+
+        public async Task<T> Get<T>(string uri)
+        {
+            T resultDate;
+            StringContent data = null;
+
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(uri);
+
+                if (!response.IsSuccessStatusCode) throw new Exception($"GetRequest: Response returned {response.StatusCode}");
+
+                string result = await response.Content.ReadAsStringAsync();
+                resultDate = JsonConvert.DeserializeObject<T>(result);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+                return default;
+            }
             _httpClient.Dispose();
             return resultDate;
         }
