@@ -59,9 +59,9 @@ namespace projektApbd.Server.Services
             await SaveChanges();
         }
 
-        public async Task<List<Shared.Models.DTOs.Company>> GetWatchlistCompanies(string username)
+        public async Task<List<Shared.Models.DTOs.Company>> GetWatchlistCompanies(int userId)
         {
-            return await _context.UserCompanies.Where(e => e.UserId == GetUser(username).Result.Id).Select(e => new Shared.Models.DTOs.Company
+            return await _context.UserCompanies.Where(e => e.UserId == userId).Select(e => new Shared.Models.DTOs.Company
             {
                 Id = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Id,
                 Ticker = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Ticker,

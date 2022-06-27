@@ -24,9 +24,9 @@
             <Template>
                 @{
                 var company = (context as projektApbd.Shared.Models.DTOs.Company);
-                <button  onclick="Delete(company)">
-                    Delete
-                </button>
+                    <button  onclick="Delete(company)">
+                        Delete
+                    </button>
                 }
             </Template>
         </GridColumn>
@@ -37,30 +37,20 @@
 
     public List<projektApbd.Shared.Models.DTOs.Company> Companies { get; set; } = new List<projektApbd.Shared.Models.DTOs.Company>();
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
-        //todo przypisac Companies
-        Companies = new List<projektApbd.Shared.Models.DTOs.Company>()
+        try
         {
-            new projektApbd.Shared.Models.DTOs.Company
-            {
-                Ticker = "ADF",
-                Name = "asdfad",
-                Locale = "us",
-                Active = true
-            },
-            new projektApbd.Shared.Models.DTOs.Company
-            {
-                Ticker = "AASF",
-                Name = "kjkhgpa",
-                Locale = "pl",
-                Active = false
-            }
-        };
-    }
+            Companies = await UserService.GetWatchlistCompany();        
+        }
+        catch (Exception ex)
+        {
+            StateHasChanged();
+        }
 
+    }
     public void Delete(projektApbd.Shared.Models.DTOs.Company company)
     {
-        
+
     }
 }
