@@ -58,6 +58,7 @@ namespace projektApbd.Server.Controllers
         }
 
         [HttpPost("ticker")]
+        [Authorize]
         public async Task<IActionResult> AddDailyOpenClose([FromBody] DailyOpenCloseRequest request)
         {
             try
@@ -88,18 +89,21 @@ namespace projektApbd.Server.Controllers
         }
 
         [HttpGet("{ticker}")]
+        [Authorize]
         public async Task<IActionResult> GetCompanyByTicker(string ticker)
         {
             return Ok(await _service.GetCompany(ticker));
         }
 
         [HttpGet("{idCompany}/{dateFrom}/{dateTo}")]
+        [Authorize]
         public async Task<IActionResult> GetDailyOpenCloses(int idCompany, DateTime dateFrom, DateTime dateTo)
         {
             return Ok(await _service.GetDailyOpenCloses(idCompany, dateFrom, dateTo));
         }
 
         [HttpGet("tickers")]
+        [Authorize]
         public async Task<IActionResult> GetAllTickers()
         {
             return Ok(await _service.GetAllTickers());

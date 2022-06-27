@@ -41,6 +41,7 @@ namespace projektApbd.Server.Controllers
         }
 
         [HttpPost("watchlist/")]
+        [Authorize]
         public async Task<IActionResult> AddCompanyToWatchlist([FromBody] int userId, int companyId)
         {
             await _userService.AddCompanyToWatchlist(userId, companyId);
@@ -48,6 +49,7 @@ namespace projektApbd.Server.Controllers
         }
 
         [HttpDelete("watchlist/")]
+        [Authorize]
         public async Task<IActionResult> DeleteCompanyFromWatchlist(int userId, int companyId)
         {
             _userService.DeleteCompanyFromWatchlist(userId, companyId);
@@ -55,6 +57,7 @@ namespace projektApbd.Server.Controllers
         }
 
         [HttpGet("watchlist/")]
+        [Authorize]
         public async Task<IActionResult> GetWathclistCompanies(string username)
         {
             return Ok(await _userService.GetWatchlistCompanies(username));

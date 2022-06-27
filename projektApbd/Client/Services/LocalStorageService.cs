@@ -1,5 +1,5 @@
 ﻿using Microsoft.JSInterop;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace projektApbd.Client.Services
 {
@@ -25,7 +25,7 @@ namespace projektApbd.Client.Services
             if (json == null)
                 return default;
 
-            return JsonSerializer.Deserialize<T>(json);
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
         public async Task RemoveItem(string key)
@@ -35,7 +35,8 @@ namespace projektApbd.Client.Services
 
         public async Task SetItem<T>(string key, T value)
         {
-            await _JSRuntime.InvokeVoidAsync("localStorage.removeItem", key);
+            string valueString = JsonConvert.SerializeObject(value);
+            await _JSRuntime.InvokeVoidAsync("localStorage.setItem", key, valueString);
         }
     }
 }
