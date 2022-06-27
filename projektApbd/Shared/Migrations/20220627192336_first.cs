@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace projektApbd.Shared.Migrations
 {
-    public partial class createdatabase : Migration
+    public partial class first : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -55,7 +55,7 @@ namespace projektApbd.Shared.Migrations
                     High = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Low = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Close = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Volume = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
+                    Volume = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
                 },
                 constraints: table =>
                 {

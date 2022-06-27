@@ -37,7 +37,7 @@ namespace projektApbd.Shared.Models
         public decimal Close { get; set; }
 
         [Required]
-        [MaxLength(255)]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal Volume { get; set; }
 
         public virtual Company Company { get; set; }
