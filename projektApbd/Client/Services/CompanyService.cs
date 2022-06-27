@@ -7,6 +7,7 @@ namespace projektApbd.Client.Services
     {
         public Task<List<string>> GetTickers();
         public Task<Company> PostCompany(string ticker);
+        public Task<List<DailyOpenClose>> PostDailyOpenCloses(string ticker, DateTime from, DateTime to);
     }
     public class CompanyService : ICompanyService
     {
@@ -24,6 +25,15 @@ namespace projektApbd.Client.Services
         public async Task<Company> PostCompany(string ticker)
         {
             return await _httpService.Post<Company>("https://localhost:7040/api/Company", ticker);
+        }
+
+        public async Task<List<DailyOpenClose>> PostDailyOpenCloses(string ticker, DateTime from, DateTime to)
+        {
+            return await _httpService.Post<List<DailyOpenClose>>($"https://localhost:7040/api/Company/{ticker}", new DailyOpenCloseRequest
+            { 
+                From = from, 
+                To = to 
+            });
         }
     }
 }

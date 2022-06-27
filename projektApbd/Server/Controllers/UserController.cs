@@ -19,7 +19,7 @@ namespace projektApbd.Server.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(Shared.Models.DTOs.User user)
+        public async Task<IActionResult> Register([FromBody] Shared.Models.DTOs.User user)
         {
             await _userService.Register(user);
             return Ok();
@@ -41,7 +41,7 @@ namespace projektApbd.Server.Controllers
         }
 
         [HttpPost("watchlist/")]
-        public async Task<IActionResult> AddCompanyToWatchlist(int userId, int companyId)
+        public async Task<IActionResult> AddCompanyToWatchlist([FromBody] int userId, int companyId)
         {
             await _userService.AddCompanyToWatchlist(userId, companyId);
             return Ok();

@@ -18,7 +18,7 @@ namespace projektApbd.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCompany(string ticker)
+        public async Task<IActionResult> AddCompany([FromBody] string ticker)
         {
             try
             {
@@ -55,14 +55,14 @@ namespace projektApbd.Server.Controllers
             }
         }
 
-        [HttpPost("{ticker}/{dateFrom}/{dateTo}")]
-        public async Task<IActionResult> AddDailyOpenClose(string ticker, DateTime dateFrom, DateTime dateTo)
+        [HttpPost("{ticker}")]
+        public async Task<IActionResult> AddDailyOpenClose([FromRoute] string ticker, [FromBody] DailyOpenCloseRequest request)
         {
             try
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var response = await httpClient.GetStringAsync(Urls.GetDailyOpenCloseUrl(ticker, dateFrom.ToString("yyyy-MM-dd"), dateTo.ToString("yyyy-MM-dd")));
+                    var response = await httpClient.GetStringAsync(Urls.GetDailyOpenCloseUrl(ticker, request.From.ToString("yyyy-MM-dd"), request.To.ToString("yyyy-MM-dd")));
                     PolygonAggregatesResponse? polygonAggregatesResponse = JsonConvert.DeserializeObject<PolygonAggregatesResponse>(response);
                     if (polygonAggregatesResponse != null)
                     {
@@ -79,7 +79,7 @@ namespace projektApbd.Server.Controllers
                 }
             } catch (TooManyRequestException)
             {
-                var dailyOpenCloses = await _service.GetDailyOpenCloses(_service.GetCompany(ticker).Result.Id, dateFrom, dateTo);
+                var dailyOpenCloses = await _service.GetDailyOpenCloses(_service.GetCompany(ticker).Result.Id, request.From, request.To);
                 return Ok(dailyOpenCloses);
                 //todo dokonczyc
             }
