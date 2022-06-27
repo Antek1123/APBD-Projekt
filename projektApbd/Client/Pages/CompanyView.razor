@@ -49,6 +49,16 @@
                     </div>
                     <div class="@loadDiv">
                         <SfStockChart Title="@Ticker">
+
+                            <StockChartCrosshairSettings Enable="true"></StockChartCrosshairSettings>
+
+                            <StockChartPeriods>
+                                <StockChartPeriod IntervalType="RangeIntervalType.Days" Interval="1" Text="1D"></StockChartPeriod>
+                                <StockChartPeriod IntervalType="RangeIntervalType.Weeks" Interval="1" Text="1W" Selected="true"></StockChartPeriod>
+                                <StockChartPeriod IntervalType="RangeIntervalType.Months" Interval="1" Text="1M"></StockChartPeriod>
+                                <StockChartPeriod IntervalType="RangeIntervalType.Months" Interval="3" Text="3M"></StockChartPeriod>
+                            </StockChartPeriods>
+
                             <StockChartEvents OnLoaded="@ChartLoaded"></StockChartEvents>
                             <StockChartPrimaryXAxis>
                                 <StockChartAxisMajorGridLines Width="0"></StockChartAxisMajorGridLines>
@@ -197,13 +207,17 @@
     {
         try
         {
-            await CompanyService.PostDailyOpenCloses(Ticker, DateTime.Now.AddDays(-14), DateTime.Now);
-            DailyOpenCloses = await CompanyService.GetDailyOpenCloses(Company.Id, DateTime.Now.AddDays(-14), DateTime.Now);
+            await CompanyService.PostDailyOpenCloses(Ticker, DateTime.Now.AddDays(-91), DateTime.Now);
+            DailyOpenCloses = await CompanyService.GetDailyOpenCloses(Company.Id, DateTime.Now.AddDays(-91), DateTime.Now);
             ChartData[] output = new ChartData[DailyOpenCloses.Count];
-            int i = 0;
 
-            foreach(var day in DailyOpenCloses)
+            if(DailyOpenCloses == null){
+                return;
+            }
+
+            for(int i = 0; i < DailyOpenCloses.Count; i++)
             {
+                var day = DailyOpenCloses[i];
                 output[i] = new ChartData
                     {
                         x =  day.Date,
@@ -211,9 +225,10 @@
                         low = decimal.ToDouble(day.Low),
                         close = decimal.ToDouble(day.Close),
                         high = decimal.ToDouble(day.High),
-                        volume = double.Parse(day.Volume)
+                        volume = 1
                     };
             }
+
 
             Console.WriteLine(DailyOpenCloses);
             DataSource = output;
@@ -241,7 +256,7 @@
 
     }
 
-    private ChartData[]? DataSource { get; set; }
+    private ChartData[] DataSource { get; set; }
     //private ChartData[]? DataSource { get; set; } = new ChartData[]
     //{
     //    new ChartData

@@ -43,8 +43,8 @@ namespace projektApbd.Client.Services
             var fromString = from.ToString("yyyy-MM-dd");
             var toString = to.ToString("yyyy-MM-dd");
 
-            //return await _httpService.Get<List<DailyOpenClose>>($"https://localhost:7040/api/Company/{id}/{fromString}/{toString}");
-            return await _httpService.Get<List<DailyOpenClose>>("https://localhost:7040/api/Company/14/2022-06-20/2022-06-27");
+            return await _httpService.Get<List<DailyOpenClose>>($"https://localhost:7040/api/Company/{id}/{fromString}/{toString}");
+            //return await _httpService.Get<List<DailyOpenClose>>("https://localhost:7040/api/Company/14/2022-06-20/2022-06-27");
         }
     }
 }

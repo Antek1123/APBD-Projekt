@@ -18,6 +18,6 @@ namespace projektApbd.Shared.Models.DTOs
 
         public decimal Close { get; set; }
 
-        public string Volume { get; set; } = string.Empty;
+        public decimal Volume { get; set; }
     }
 }

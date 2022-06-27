@@ -38,7 +38,7 @@ namespace projektApbd.Shared.Models
 
         [Required]
         [MaxLength(255)]
-        public string Volume { get; set; } = string.Empty;
+        public decimal Volume { get; set; }
 
         public virtual Company Company { get; set; }
     }
