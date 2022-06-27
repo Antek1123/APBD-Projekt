@@ -69,7 +69,7 @@ namespace projektApbd.Server.Services
                 Homepage_url = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Homepage_url,
                 Locale = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Locale,
                 Logo_Url = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Logo_Url,
-                Phone_Number = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Phone_Number,
+                //Phone_Number = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Phone_Number,
                 Description = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Description,
                 Currency_Name = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Currency_Name,
                 Active = _context.Companies.FirstOrDefault(f => f.Id == e.CompanyId).Active

@@ -13,7 +13,7 @@ namespace projektApbd.Server.Services
             _context = context;
         }
 
-        public async Task<Company> AddCompany(Shared.Models.DTOs.Company model)
+        public async Task<Shared.Models.DTOs.Company> AddCompany(Shared.Models.DTOs.Company model)
         {
             var company = new Company
             { 
@@ -22,7 +22,7 @@ namespace projektApbd.Server.Services
                 Homepage_url = model.Homepage_url,
                 Locale = model.Locale,
                 Logo_Url = model.Logo_Url,
-                Phone_Number = model.Phone_Number,
+                //Phone_Number = model.Phone_Number,
                 Description = model.Description,
                 Currency_Name = model.Currency_Name,
                 Active = model.Active
@@ -36,7 +36,7 @@ namespace projektApbd.Server.Services
             {
                 await _context.AddAsync(company);
                 await SaveChanges();
-                return company;
+                return await GetCompany(company.Ticker);
             }
         }
 
@@ -65,9 +65,20 @@ namespace projektApbd.Server.Services
             }
         }
 
-        public async Task<Company> GetCompany(string ticker)
+        public async Task<Shared.Models.DTOs.Company> GetCompany(string ticker)
         {
-            Company? company = await _context.Companies.FirstOrDefaultAsync(e => e.Ticker.Equals(ticker));
+            Shared.Models.DTOs.Company? company = await _context.Companies.Where(e => e.Ticker == ticker).Select(e => new Shared.Models.DTOs.Company
+            {
+                Id = e.Id,
+                Ticker = e.Ticker,
+                Name = e.Name,
+                Homepage_url = e.Homepage_url,
+                Locale = e.Locale,
+                Logo_Url = e.Logo_Url,
+                Description = e.Description,
+                Currency_Name = e.Currency_Name,
+                Active = e.Active
+            }).FirstOrDefaultAsync();
             if (company == null)
                 throw new NotFoundException("Company not exists");
 

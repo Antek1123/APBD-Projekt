@@ -24,13 +24,13 @@
     [Parameter]
     public string Ticker { get; set; }
 
-    public projektApbd.Shared.Models.Company Company { get; set; }
+    public projektApbd.Shared.Models.DTOs.Company Company { get; set; }
     public string Error { get; set; }
 
-    //protected override void OnParametersSet()
-    //{
-    //    var test = Ticker;
-    //}
+    protected override void OnParametersSet()
+    {
+        var test = Ticker;
+    }
 
     protected override async Task OnInitializedAsync()
     {

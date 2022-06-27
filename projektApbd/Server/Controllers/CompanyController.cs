@@ -36,7 +36,7 @@ namespace projektApbd.Server.Controllers
                         Homepage_url = company.Homepage_url,
                         Locale = company.Locale,
                         Logo_Url = company.branding.Logo_Url,
-                        Phone_Number = company.Phone_Number,
+                        //Phone_Number = company.Phone_Number,
                         Description = company.Description,
                         Currency_Name = company.Currency_Name,
                         Active = company.Active
@@ -46,7 +46,7 @@ namespace projektApbd.Server.Controllers
                 }
             } catch (TooManyRequestException)
             {
-                Shared.Models.Company company = await _service.GetCompany(ticker);
+                Company company = await _service.GetCompany(ticker);
 
                 if (company == null)
                     throw new NotFoundException("object not exists in database");

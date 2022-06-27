@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Json;
-using projektApbd.Shared.Models;
+using projektApbd.Shared.Models.DTOs;
 
 namespace projektApbd.Client.Services
 {

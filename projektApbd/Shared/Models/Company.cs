@@ -31,7 +31,6 @@ namespace projektApbd.Shared.Models
         [MaxLength(255)]
         public string Logo_Url { get; set; } = string.Empty;
 
-        [Required]
         [MaxLength(20)]
         [DataType(DataType.PhoneNumber)]
         public string Phone_Number { get; set; } = string.Empty;

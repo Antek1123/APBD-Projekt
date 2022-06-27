@@ -20,7 +20,7 @@ namespace projektApbd.Shared.Models.DTOs
 
         public string Logo_Url { get; set; } = string.Empty;
 
-        public string Phone_Number { get; set; } = string.Empty;
+        //public string Phone_Number { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
 
