@@ -6,7 +6,7 @@ namespace projektApbd.Client.Services
     public interface ICompanyService
     {
         public Task<List<string>> GetTickers();
-        public Task<Company> GetCompany(string ticker);
+        public Task<Company> PostCompany(string ticker);
     }
     public class CompanyService : ICompanyService
     {
@@ -21,9 +21,9 @@ namespace projektApbd.Client.Services
             return await _httpService.Get<List<string>>("https://localhost:7040/api/Company/tickers");
         }
 
-        public async Task<Company> GetCompany(string ticker)
+        public async Task<Company> PostCompany(string ticker)
         {
-            return await _httpService.Get<Company>($"https://localhost:7040/api/Company/{ticker}");
+            return await _httpService.Post<Company>("https://localhost:7040/api/Company", ticker);
         }
     }
 }

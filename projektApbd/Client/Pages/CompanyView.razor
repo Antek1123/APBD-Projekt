@@ -11,7 +11,7 @@
                 <ContentTemplate>
                 <div>
                     <p>@Company.Id</p>
-                    <p>@Error</p>
+                    
                 </div>
             </ContentTemplate>
         </DashboardLayoutPanel>
@@ -24,7 +24,7 @@
     [Parameter]
     public string Ticker { get; set; }
 
-    public projektApbd.Shared.Models.DTOs.Company Company { get; set; }
+    public projektApbd.Shared.Models.DTOs.Company Company { get; set; } = new projektApbd.Shared.Models.DTOs.Company();
     public string Error { get; set; }
 
     protected override void OnParametersSet()
@@ -36,7 +36,7 @@
     {
         try
         {
-            Company = await CompanyService.GetCompany(Ticker);
+            Company = await CompanyService.PostCompany(Ticker);
         }
         catch (Exception ex)
         {

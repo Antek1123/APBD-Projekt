@@ -17,7 +17,7 @@ namespace projektApbd.Server.Controllers
             _service = service;
         }
 
-        [HttpPost("{ticker}")]
+        [HttpPost]
         public async Task<IActionResult> AddCompany(string ticker)
         {
             try
@@ -36,7 +36,7 @@ namespace projektApbd.Server.Controllers
                         Homepage_url = company.Homepage_url,
                         Locale = company.Locale,
                         Logo_Url = company.branding.Logo_Url,
-                        //Phone_Number = company.Phone_Number,
+                        Phone_Number = company.Phone_Number,
                         Description = company.Description,
                         Currency_Name = company.Currency_Name,
                         Active = company.Active

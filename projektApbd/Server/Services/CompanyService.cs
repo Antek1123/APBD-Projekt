@@ -22,7 +22,7 @@ namespace projektApbd.Server.Services
                 Homepage_url = model.Homepage_url,
                 Locale = model.Locale,
                 Logo_Url = model.Logo_Url,
-                //Phone_Number = model.Phone_Number,
+                Phone_Number = model.Phone_Number,
                 Description = model.Description,
                 Currency_Name = model.Currency_Name,
                 Active = model.Active

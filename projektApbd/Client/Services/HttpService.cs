@@ -15,6 +15,7 @@ namespace projektApbd.Client.Services
         Task Delete<T>(string uri, object value);
         Task<T> Login<T, T2>(T2 requestBody);
         Task<T> Post<T>(string uri, T requestBody);
+        Task<T> Post<T>(string uri, Object requestBody);
     }
     public class HttpService : IHttpService
     {
@@ -148,6 +149,35 @@ namespace projektApbd.Client.Services
                 Trace.TraceError(ex.Message);
                 return default;
             }
+            return resultDate;
+        }
+
+        public async Task<T> Post<T>(string uri, object requestBody)
+        {
+            T resultDate;
+            StringContent data = null;
+
+            try
+            {
+                if (requestBody != null)
+                {
+                    string json = JsonConvert.SerializeObject(requestBody);
+                    data = new StringContent(json, Encoding.UTF8, "application/json");
+                }
+
+                HttpResponseMessage response = await _httpClient.PostAsync(uri, data);
+
+                if (!response.IsSuccessStatusCode) throw new Exception($"PostRequest: Response returned {response.StatusCode}");
+
+                string result = await response.Content.ReadAsStringAsync();
+                resultDate = JsonConvert.DeserializeObject<T>(result);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+                return default;
+            }
+
             return resultDate;
         }
     }
