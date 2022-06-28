@@ -60,7 +60,8 @@ namespace projektApbd.Server.Controllers
         [Authorize]
         public async Task<IActionResult> GetWathclistCompanies(int userId)
         {
-            return Ok(await _userService.GetWatchlistCompanies(userId));
+            var output = await _userService.GetWatchlistCompanies(userId);
+            return Ok(output);
         }
     }
 }

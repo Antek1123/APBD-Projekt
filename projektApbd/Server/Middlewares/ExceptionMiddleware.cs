@@ -10,7 +10,7 @@ namespace projektApbd.Server.Middlewares
             {
                 await next.Invoke(context);
             } 
-            catch (BadReqiestException exc)
+            catch (BadRequestException exc)
             {
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync(exc.Message);

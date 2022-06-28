@@ -21,20 +21,20 @@ namespace projektApbd.Client.Services
 
         public async Task DeleteCompanyFromWatchlist(int companyId)
         {
-            var userId = _localStorage.GetItem<UserLoginResponse>("user").Id;
+            var user = _localStorage.GetItem<UserLoginResponse>("user");
             //return await 
         }
 
         public async Task<List<Company>> GetWatchlistCompany()
         {
-            var userId = _localStorage.GetItem<UserLoginResponse>("user").Id;
-            return await _httpService.Get<List<Company>>($"https://localhost:7040/api/User/{userId}/watchlist");
+            var user = await _localStorage.GetItem<UserLoginResponse>("user");
+            return await _httpService.Get<List<Company>>($"https://localhost:7040/api/User/{user.Id}/watchlist");
         }
 
         public async Task PostCompanyToWatchlist(int companyId)
         {
-            var userId = _localStorage.GetItem<UserLoginResponse>("user").Id;
-            await _httpService.Post($"https://localhost:7040/api/User/{userId}/watchlist", companyId);
+            var user = await _localStorage.GetItem<UserLoginResponse>("user");
+            await _httpService.Post($"https://localhost:7040/api/User/{user.Id}/watchlist", companyId);
         }
     }
 }

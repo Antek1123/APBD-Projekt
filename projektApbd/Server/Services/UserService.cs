@@ -107,7 +107,7 @@ namespace projektApbd.Server.Services
             var user = await GetUser(userLoginRequest.Username);
 
             if (!BCryptNet.Verify(userLoginRequest.Password, user.Password))
-                throw new BadReqiestException("Incorrect username or password");
+                throw new BadRequestException("Incorrect username or password");
 
             var userResponse = new Shared.Models.DTOs.UserLoginResponse
             {
@@ -123,10 +123,10 @@ namespace projektApbd.Server.Services
         public async Task Register(Shared.Models.DTOs.User user)
         {
             if (IsUserExistsByUsername(user.Username).Result)
-                throw new BadReqiestException("User with this username already exists");
+                throw new BadRequestException("User with this username already exists");
 
             if (IsUserExistsByEmail(user.Email).Result)
-                throw new BadReqiestException("This email is already taken");
+                throw new BadRequestException("This email is already taken");
 
             var newUser = new User
             {

@@ -9,7 +9,7 @@
 @using Syncfusion.Blazor.Grids;
 @using Syncfusion.Blazor.Buttons;
 
-<table class="table">
+@*<table class="table">
     <thead>
     <td>Ticker</td>
     <td>Name</td>
@@ -29,24 +29,26 @@
 </tr>
         }
 
-</table>
+</table>*@
+
 
 @code {
 
-    public List<projektApbd.Shared.Models.DTOs.Company>? Companies { get; set; } = new List<projektApbd.Shared.Models.DTOs.Company>();
+    public List<projektApbd.Shared.Models.DTOs.Company> Companies { get; set; } = new List<projektApbd.Shared.Models.DTOs.Company>();
 
-    protected override async void OnInitialized()
+    protected override async void OnInitialized() 
     {
         try
         {
-            Companies = await UserService.GetWatchlistCompany();        
+            var output = await UserService.GetWatchlistCompany();
+            Companies = output;
         }
         catch (Exception ex)
         {
             StateHasChanged();
         }
-
     }
+
     public async Task Delete(projektApbd.Shared.Models.DTOs.Company company)
     {
         await UserService.DeleteCompanyFromWatchlist(company.Id);
