@@ -1,5 +1,6 @@
 ﻿@page "/watchlist"
 @attribute [Authorize]
+@inject NavigationManager NavigationManager;
 @inject ICompanyService CompanyService;
 @inject IUserService UserService;
 @using projektApbd.Shared.Models.DTOs;
@@ -9,14 +10,16 @@
 @using Syncfusion.Blazor.Grids;
 @using Syncfusion.Blazor.Buttons;
 
-@*<table class="table">
-    <thead>
-    <td>Ticker</td>
-    <td>Name</td>
-    <td>Locale</td>
-    <td>Active</td>
-    <td>Delete</td>
-    </thead>
+
+<table class="table">
+    <tr>
+    <th>Ticker</th>
+    <th>Name</th>
+    <th>Locale</th>
+    <th>Active</th>
+    <th>Show</th>
+    <th>Delete</th>
+    </tr>
 
     @foreach (projektApbd.Shared.Models.DTOs.Company company in Companies)
         {
@@ -25,23 +28,23 @@
     <td>@company.Name</td>
     <td>@company.Locale</td>
     <td>@company.Active</td>
-    <td><button type="submit" class="btn btn-outline-danger" onclick="@(() => Delete(company))">DELETE</button></td>
+    <td><button type="submit" class="btn btn-outline-info" onclick="@(() => NavigateToCompanyView(company))">Show</button></td>
+    <td><button type="submit" class="btn btn-outline-danger" onclick="@(() => Delete(company))">Delete</button></td>
 </tr>
         }
 
-</table>*@
+</table>
 
 
 @code {
 
     public List<projektApbd.Shared.Models.DTOs.Company> Companies { get; set; } = new List<projektApbd.Shared.Models.DTOs.Company>();
 
-    protected override async void OnInitialized() 
+    protected override async Task OnInitializedAsync()
     {
         try
         {
-            var output = await UserService.GetWatchlistCompany();
-            Companies = output;
+            Companies = await UserService.GetWatchlistCompany();
         }
         catch (Exception ex)
         {
@@ -52,5 +55,12 @@
     public async Task Delete(projektApbd.Shared.Models.DTOs.Company company)
     {
         await UserService.DeleteCompanyFromWatchlist(company.Id);
+        Companies = await UserService.GetWatchlistCompany();
+        StateHasChanged();
+    }
+
+    public async Task NavigateToCompanyView(projektApbd.Shared.Models.DTOs.Company company)
+    {
+        NavigationManager.NavigateTo($"/company/{company.Ticker.ToUpper()}");
     }
 }

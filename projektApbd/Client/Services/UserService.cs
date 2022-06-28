@@ -22,7 +22,7 @@ namespace projektApbd.Client.Services
         public async Task DeleteCompanyFromWatchlist(int companyId)
         {
             var user = _localStorage.GetItem<UserLoginResponse>("user");
-            //return await 
+            await _httpService.Delete($"https://localhost:7040/api/User/{user.Id}/watchlist/{companyId}");
         }
 
         public async Task<List<Company>> GetWatchlistCompany()

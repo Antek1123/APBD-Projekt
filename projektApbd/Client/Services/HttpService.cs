@@ -13,7 +13,7 @@ namespace projektApbd.Client.Services
     public interface IHttpService
     {
         Task<T> Get<T>(string uri);
-        Task Delete<T>(string uri);
+        Task Delete(string uri);
         Task<T> Login<T, T2>(T2 requestBody);
         Task<T> Post<T>(string uri, Object requestBody);
         Task Post(string ui, Object requestBody);
@@ -144,9 +144,8 @@ namespace projektApbd.Client.Services
             }
         }
 
-        public async Task Delete<T>(string uri)
+        public async Task Delete(string uri)
         {
-            T resultDate;
             StringContent data = null;
 
             try

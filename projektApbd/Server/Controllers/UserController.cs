@@ -52,7 +52,7 @@ namespace projektApbd.Server.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteCompanyFromWatchlist([FromRoute] int userId, [FromRoute] int companyId)
         {
-            _userService.DeleteCompanyFromWatchlist(userId, companyId);
+            await _userService.DeleteCompanyFromWatchlist(userId, companyId);
             return Ok();
         }
 
