@@ -17,10 +17,9 @@ namespace projektApbd.Client.Helpers
         protected override void Render(RenderTreeBuilder builder)
         {
             var authorize = Attribute.GetCustomAttribute(RouteData.PageType, typeof(AuthorizeAttribute)) != null;
-            if (authorize && AuthenticationService.UserResponse == null)
+            if (authorize && !AuthenticationService.IsUserLogin())
             {
-                var returnUrl = WebUtility.UrlEncode(new Uri(NavigationManager.Uri).PathAndQuery);
-                NavigationManager.NavigateTo($"login?returnUrl={returnUrl}");
+                NavigationManager.NavigateTo($"/login");
             }
             else
             {

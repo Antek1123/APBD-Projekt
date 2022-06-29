@@ -6,18 +6,19 @@ namespace projektApbd.Client.Services
 {
     public interface IAuthenticationService
     {
-        public UserLoginResponse UserResponse { get; }
         public Task Initialize();
         public Task Login(UserLoginRequest userLoginRequest);
         public Task Logout();
         public Task Register(User user);
+        bool IsUserLogin();
+        static UserLoginResponse CurrentUser { get; set; }
     }
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IHttpService _httpService;
         private readonly NavigationManager _navigationManager;
         private readonly ILocalStorageService _localStorageService;
-        public UserLoginResponse UserResponse { get; private set; }
+        public static UserLoginResponse CurrentUser { get; set; }
 
         public AuthenticationService(
             IHttpService httpService,
@@ -30,20 +31,25 @@ namespace projektApbd.Client.Services
             _localStorageService = localStorageService;
         }
 
+        public bool IsUserLogin()
+        {
+            return !string.IsNullOrEmpty(CurrentUser?.JwtToken);
+        }
+
         public async Task Initialize()
         {
-            UserResponse = await _localStorageService.GetItem<UserLoginResponse>("user");
+            CurrentUser = await _localStorageService.GetItem<UserLoginResponse>("user");
         }
 
         public async Task Login(UserLoginRequest userLoginRequest)
         {
-            UserResponse = await _httpService.Login<UserLoginResponse, UserLoginRequest>(userLoginRequest);
-            await _localStorageService.SetItem("user", UserResponse);
+            CurrentUser = await _httpService.Login<UserLoginResponse, UserLoginRequest>(userLoginRequest);
+            await _localStorageService.SetItem("user", CurrentUser);
         }
 
         public async Task Logout()
         {
-            UserResponse = null;
+            CurrentUser = null;
             await _localStorageService.RemoveItem("user");
             _navigationManager.NavigateTo("/login");
         }

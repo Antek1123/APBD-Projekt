@@ -47,7 +47,7 @@
     protected override void OnInitialized()
     {
         // redirect to home if already logged in
-        if (AuthenticationService.UserResponse != null)
+        if (AuthenticationService.IsUserLogin())
         {
             NavigationManager.NavigateTo("");
         }
@@ -59,12 +59,7 @@
         try
         {
             await AuthenticationService.Login(model);
-            var query = new Uri(NavigationManager.Uri).Query;
-            var queryStrings = QueryHelpers.ParseQuery(query);
-            if(queryStrings.TryGetValue("returnUrl", out var returnUrl))
-            {
-                NavigationManager.NavigateTo(returnUrl);
-            }
+            NavigationManager.NavigateTo("");
         }
         catch (Exception ex)
         {

@@ -55,7 +55,7 @@
 
     protected override void OnInitialized()
     {
-        if (AuthenticationService.UserResponse != null)
+        if (AuthenticationService.IsUserLogin())
         {
             NavigationManager.NavigateTo("");
         }
@@ -73,13 +73,7 @@
                    Username = model.Username,
                    Password = model.Password
                 });
-            var query = new Uri(NavigationManager.Uri).Query;
-            var queryStrings = QueryHelpers.ParseQuery(query);
-            if (queryStrings.TryGetValue("returnUrl", out var returnUrl))
-            {
-                NavigationManager.NavigateTo(returnUrl);
-            }
-            NavigationManager.NavigateTo("/index");
+            NavigationManager.NavigateTo("");
         }
         catch (Exception ex)
         {

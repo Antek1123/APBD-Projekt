@@ -133,7 +133,9 @@ namespace projektApbd.Client.Services
                 }
 
                 var user = await _localStorageService.GetItem<UserLoginResponse>("user");
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.JwtToken);
+                if (user != null)
+                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.JwtToken);
+
                 HttpResponseMessage response = await _httpClient.PostAsync(uri, data);
 
                 if (!response.IsSuccessStatusCode) throw new Exception($"PostRequest: Response returned {response.StatusCode}");
@@ -146,15 +148,15 @@ namespace projektApbd.Client.Services
 
         public async Task Delete(string uri)
         {
-            StringContent data = null;
-
             try
             {
                 var user = await _localStorageService.GetItem<UserLoginResponse>("user");
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.JwtToken);
+                if (user != null)
+                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.JwtToken);
+
                 HttpResponseMessage response = await _httpClient.DeleteAsync(uri);
 
-                if (!response.IsSuccessStatusCode) throw new Exception($"PostRequest: Response returned {response.StatusCode}");
+                if (!response.IsSuccessStatusCode) throw new Exception($"DeleteRequest: Response returned {response.StatusCode}");
             }
             catch (Exception ex)
             {

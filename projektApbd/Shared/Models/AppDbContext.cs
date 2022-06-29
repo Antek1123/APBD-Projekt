@@ -27,7 +27,6 @@ namespace projektApbd.Shared.Models
         {
             modelBuilder.Entity<UserCompany>().HasKey(e => new { e.UserId, e.CompanyId });
             modelBuilder.Entity<DailyOpenClose>().HasKey(e => new { e.Id, e.Date });
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -2,14 +2,14 @@
 @inject IAuthenticationService AuthenticationService
 @inject NavigationManager NavigationManager
 
-@if (AuthenticationService.UserResponse != null)
+@if (AuthenticationService.IsUserLogin())
 {
     <!-- nav -->
     <nav class="navbar navbar-expand navbar-dark bg-dark">
         <div class="navbar-nav">
             <NavLink href="" Match="NavLinkMatch.All" class="nav-item nav-link">Search</NavLink>
             <NavLink href="/watchlist" class="nav-item nav-link">Watchlist</NavLink>
-            <NavLink href="logout" class="nav-item nav-link">Logout</NavLink>
+            <button type="submit" @onclick="AuthenticationService.Logout">Wyloguj</button>
         </div>
     </nav>
 }

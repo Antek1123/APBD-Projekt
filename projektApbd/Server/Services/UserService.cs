@@ -113,7 +113,6 @@ namespace projektApbd.Server.Services
             {
                 Id = user.Id,
                 Username = user.Username,
-                Email = user.Email,
                 JwtToken = await _jwtUtils.GenerateToken(user)
             };
 
